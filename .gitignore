@@ -1,0 +1,10 @@
+*.elc
+*~
+
+/auto-save-list/
+/elpa/
+
+backups
+network-security.data
+
+.DS_Store
