@@ -32,7 +32,6 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
-
 ;;; Packages
 (use-package jedi
   :ensure t
@@ -93,7 +92,6 @@
   (load-theme 'gruvbox t))
 
 
-
 ;; Miscellaneous Stuff
 
 ;; store all backup and autosave files in the tmp dir
@@ -109,9 +107,12 @@
           ;; Default indentation is usually 2 spaces, changing to 4.
           (set (make-local-variable 'sgml-basic-offset) 4)))
 	  
-;; Custom major modes for certain files
+;; Custom major modes for files based on extension
 ;; .handlebars files open in html
 (add-to-list 'auto-mode-alist '("\\.handlebars\\'" . html-mode))
+
+;; .ino files open in C
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
 ;; open this .emacs file based on it's first line
 (add-to-list 'magic-mode-alist '(";; Emacs config file" . lisp-mode) )
