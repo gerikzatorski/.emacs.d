@@ -3,6 +3,34 @@
 ;; User Info
 (setq user-full-name "Gerik Zatorski")
 
+
+;; Set path to dependencies
+(setq settings-dir (expand-file-name "settings" user-emacs-directory))
+
+;; Setup load path
+(add-to-list 'load-path settings-dir)
+
+;; handle other .el files
+(add-to-list 'load-path' "~/.emacs.d/functions.el")
+
+;; keep emacs Custom-settings in a separate file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
+
+;; ------------------------------------------------------------
+;; Basic Settings
+;; ------------------------------------------------------------
+
+;; replaces region when typing
+(pending-delete-mode t)
+
+;; no splash screen 
+(setq inhibit-startup-message t)
+
+;; ------------------------------------------------------------
+;; Packages
+;; ------------------------------------------------------------
+
 ;; Install use-package if necessary
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -22,16 +50,12 @@
 (require 'diminish)
 (require 'bind-key)
 
-;; handle .el files
-(add-to-list 'load-path' "~/.emacs.d/functions.el")
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
-
 ;; Set the path variable
 (use-package exec-path-from-shell
   :ensure t
-  :config (exec-path-from-shell-initialize))
-
+  :config
+  ;; setup environment variables from the user's shell
+  (exec-path-from-shell-initialize))
 
 ;;; Packages
 (use-package jedi
@@ -58,6 +82,11 @@
   (add-to-list 'load-path "which-folder-ace-jump-mode-file-in/")
   (require 'ace-jump-mode)
   (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
+
+(use-package expand-region
+  :ensure t
+  :config
+  (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;; TODO
 ;; idomenu info told me to include this
@@ -92,9 +121,21 @@
   :init
   (load-theme 'gruvbox t))
 
+(use-package go-mode
+  :ensure t)
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 
+;; ------------------------------------------------------------
 ;; Miscellaneous Stuff
+;; ------------------------------------------------------------
 
 ;; store all backup and autosave files in the tmp dir
 ;; https://www.emacswiki.org/emacs/BackupDirectory
