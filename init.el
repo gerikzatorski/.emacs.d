@@ -53,9 +53,13 @@
 ;; Set the path variable
 (use-package exec-path-from-shell
   :ensure t
+<<<<<<< HEAD
   :config
   ;; setup environment variables from the user's shell
   (exec-path-from-shell-initialize))
+=======
+  :config (exec-path-from-shell-initialize))
+>>>>>>> origin/master
 
 ;;; Packages
 (use-package jedi
@@ -116,7 +120,7 @@
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
-(use-package gruvbox-theme
+(use-package zenburn-theme
   :ensure t
   :init
   (load-theme 'gruvbox t))
@@ -132,8 +136,11 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+<<<<<<< HEAD
 
 ;; ------------------------------------------------------------
+=======
+>>>>>>> origin/master
 ;; Miscellaneous Stuff
 ;; ------------------------------------------------------------
 
@@ -150,9 +157,29 @@
           ;; Default indentation is usually 2 spaces, changing to 4.
           (set (make-local-variable 'sgml-basic-offset) 4)))
 	  
-;; Custom major modes for certain files
+;; Custom major modes for files based on extension
 ;; .handlebars files open in html
 (add-to-list 'auto-mode-alist '("\\.handlebars\\'" . html-mode))
 
+;; .ino files open in C
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
+
+;; .launch files open in xml
+(add-to-list 'auto-mode-alist '("\\.launch\\'" . xml-mode))
+
 ;; open this .emacs file based on it's first line
 (add-to-list 'magic-mode-alist '(";; Emacs config file" . lisp-mode) )
+
+;; KEY BINDINGS
+
+;; solution from
+;; http://stackoverflow.com/a/9697222/3105650
+(defun comment-or-uncomment-region-or-line ()
+    "Comments or uncomments the region or the current line if there's no active region."
+    (interactive)
+    (let (beg end)
+        (if (region-active-p)
+            (setq beg (region-beginning) end (region-end))
+            (setq beg (line-beginning-position) end (line-end-position)))
+        (comment-or-uncomment-region beg end)))
+(global-set-key (kbd "C-x C-;") 'comment-or-uncomment-region-or-line)
