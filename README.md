@@ -2,8 +2,18 @@
 
 ## Packages to Consider:
 
+* uniquify
 * idomenu
-* yasnippet
-* irony
-* jedi (is there an all around autocomplete?)
 * keychord
+* flycheck
+* flx
+* smex
+* workgroups
+* magit
+* avy (like ace-jump-mode)
+* smartparens
+* helm
+
+## Built-Ins that I should know
+
+* CEDET

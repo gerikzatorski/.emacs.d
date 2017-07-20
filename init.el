@@ -5,7 +5,7 @@
 ;; Author: Gerik Zatorski
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Basics
+;; Basic Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; no splash screen 
@@ -17,6 +17,9 @@
 ;; Setup load path
 (add-to-list 'load-path settings-dir)
 
+;; set org variables for global todo
+(setq org-agenda-files (list "~/org/school.org"
+			     "~/org/home.org"))
 ;; handle other .el files
 ;;(add-to-list 'load-path' "~/.emacs.d/functions.el")
 
@@ -29,6 +32,15 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+
+;; enable ido-everywhere  and flex matching
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Key Bindings 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Bind imenu
 (global-set-key (kbd "M-i") 'imenu)
@@ -89,13 +101,49 @@
 
 (use-package expand-region
   :ensure t
-  :bind ("C-=" . er/expand-region))
+  :bind
+  ("C-=" . er/expand-region)
+  ("C--" . er/contract-region))
 
- (use-package beacon
+(use-package beacon
+ :ensure t
+ :config
+ (beacon-mode 1)
+ (setq beacon-color "#666600"))
+
+(use-package irony
   :ensure t
   :config
-  (beacon-mode 1)
-  (setq beacon-color "#666600"))
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  ;; replace the `completion-at-point' and `complete-symbol' bindings in
+  ;; irony-mode's buffers by irony-mode's function
+  (defun my-irony-mode-hook ()
+    (define-key irony-mode-map [remap completion-at-point]
+      'irony-completion-at-point-async)
+    (define-key irony-mode-map [remap complete-symbol]
+      'irony-completion-at-point-async))
+  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+(use-package magit
+  :ensure t)
+
+(use-package yasnippet
+  :ensure t
+  :init (yas-global-mode 1)
+  :mode ("\\.yasnippet" . snippet-mode))
+
+(use-package company
+  :ensure t
+  :defer t
+  :init (global-company-mode))
+
+(use-package gruvbox-theme
+  :ensure t
+  :defer t
+  :init (load-theme 'gruvbox t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Major Modes
@@ -126,7 +174,7 @@
         (comment-or-uncomment-region beg end)))
 (global-set-key (kbd "C-x C-;") 'comment-or-uncomment-region-or-line)
 
-;; rename buffer and file
+;; Rename Buffer (deletes file with old name)
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
@@ -145,27 +193,34 @@
                    name (file-name-nondirectory new-name)))))))
 (global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
 
-;; Author: Patrick Gundlach 
-;; nice mark - shows mark as a highlighted 'cursor' so user 'always' 
-;; sees where the mark is. Especially nice for killing a region.
-(defvar pg-mark-overlay nil
-  "Overlay to show the position where the mark is") 
-(make-variable-buffer-local 'pg-mark-overlay)
-(put 'pg-mark-mark 'face 'secondary-selection)
-(defvar pg-mark-old-position nil
-  "The position the mark was at. To be able to compare with the
-current position")
-(defun pg-show-mark () 
-  "Display an overlay where the mark is at. Should be hooked into 
-activate-mark-hook" 
-  (unless pg-mark-overlay 
-    (setq pg-mark-overlay (make-overlay 0 0))
-    (overlay-put pg-mark-overlay 'category 'pg-mark-mark))
-  (let ((here (mark t)))
-    (when here
-      (move-overlay pg-mark-overlay here (1+ here)))))
-(defadvice  exchange-point-and-mark (after pg-mark-exchange-point-and-mark)
-  "Show visual marker"
-  (pg-show-mark))
-(ad-activate 'exchange-point-and-mark)
-(add-hook 'activate-mark-hook 'pg-show-mark)
+;; Duplicate Current Line
+;; https://stackoverflow.com/a/998472/3105650
+(defun duplicate-line (arg)
+  "Duplicate current line, leaving point in lower line."
+  (interactive "*p")
+  ;; save the point for undo
+  (setq buffer-undo-list (cons (point) buffer-undo-list))
+  ;; local variables for start and end of line
+  (let ((bol (save-excursion (beginning-of-line) (point)))
+        eol)
+    (save-excursion
+      ;; don't use forward-line for this, because you would have
+      ;; to check whether you are at the end of the buffer
+      (end-of-line)
+      (setq eol (point))
+      ;; store the line and disable the recording of undo information
+      (let ((line (buffer-substring bol eol))
+            (buffer-undo-list t)
+            (count arg))
+        ;; insert the line arg times
+        (while (> count 0)
+          (newline)         ;; because there is no newline in 'line'
+          (insert line)
+          (setq count (1- count)))
+        )
+      ;; create the undo information
+      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list)))
+    ) ; end-of-let
+  ;; put the point in the lowest line and return
+  (next-line arg))
+(global-set-key (kbd "C-c d") 'duplicate-line)
