@@ -36,8 +36,10 @@
 ;; enable ido-everywhere  and flex matching
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
-(ido-mode 1)
+;; (ido-mode 1)
 
+;; sentences end with a single space, not two
+(setq sentence-end-double-space nil)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Key Bindings 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -133,6 +135,7 @@
 (use-package yasnippet
   :ensure t
   :init (yas-global-mode 1)
+  (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   :mode ("\\.yasnippet" . snippet-mode))
 
 (use-package company
@@ -144,6 +147,55 @@
   :ensure t
   :defer t
   :init (load-theme 'gruvbox t))
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+
+(use-package helm-core
+  :ensure t)
+
+(use-package helm-config
+  :ensure t)
+
+(use-package helm
+  :ensure t
+  :bind (("M-a" . helm-M-x)
+         ;; ("C-x C-f" . helm-find-files)
+         ;; ("C-x f" . helm-recentf)
+         ;; ("C-SPC" . helm-dabbrev)
+         ;; ("M-y" . helm-show-kill-ring)
+         ;; ("C-x b" . helm-buffers-list)
+	 )
+  :bind (:map helm-map
+	      ("M-i" . helm-previous-line)
+	      ("M-k" . helm-next-line)
+	      ("M-I" . helm-previous-page)
+	      ("M-K" . helm-next-page)
+	      ("M-h" . helm-beginning-of-buffer)
+	      ("M-H" . helm-end-of-buffer))
+  :config (progn
+	    (setq helm-buffers-fuzzy-matching t)
+            (helm-mode 1)))
+
+(use-package helm-descbinds
+  :ensure t
+  :bind ("C-h b" . helm-descbinds))
+
+(use-package helm-files
+  :bind (:map helm-find-files-map
+	      ("M-i" . nil)
+	      ("M-k" . nil)
+	      ("M-I" . nil)
+	      ("M-K" . nil)
+	      ("M-h" . nil)
+	      ("M-H" . nil)))
+(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Major Modes
@@ -224,3 +276,16 @@
   ;; put the point in the lowest line and return
   (next-line arg))
 (global-set-key (kbd "C-c d") 'duplicate-line)
+
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (if (vc-backend filename)
+          (vc-delete-file filename)
+        (progn
+          (delete-file filename)
+          (message "Deleted file %s" filename)
+          (kill-buffer))))))
+(global-set-key (kbd "C-x <deletechar>")  'delete-file-and-buffer)
