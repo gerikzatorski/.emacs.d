@@ -12,19 +12,17 @@
 (setq inhibit-startup-message t)
 
 ;; Set path to dependencies
-(setq settings-dir (expand-file-name "settings" user-emacs-directory))
+;; (setq settings-dir (expand-file-name "settings" user-emacs-directory))
 
 ;; Setup load path
-(add-to-list 'load-path settings-dir)
+;; (add-to-list 'load-path settings-dir)
 
 ;; set org variables for global todo
 (setq org-agenda-files (list "~/org/school.org"
 			     "~/org/home.org"))
+
 ;; handle other .el files
 ;;(add-to-list 'load-path' "~/.emacs.d/functions.el")
-
-;; replaces region when typing
-(pending-delete-mode t)
 
 ;; store all backup and autosave files in the system's temp dir
 ;; https://www.emacswiki.org/emacs/BackupDirectory
@@ -32,11 +30,6 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-
-;; enable ido-everywhere  and flex matching
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-;; (ido-mode 1)
 
 ;; sentences end with a single space, not two
 (setq sentence-end-double-space nil)
@@ -113,35 +106,11 @@
  (beacon-mode 1)
  (setq beacon-color "#666600"))
 
-(use-package irony
-  :ensure t
-  :config
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  ;; replace the `completion-at-point' and `complete-symbol' bindings in
-  ;; irony-mode's buffers by irony-mode's function
-  (defun my-irony-mode-hook ()
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
-  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
-(use-package magit
-  :ensure t)
-
 (use-package yasnippet
   :ensure t
   :init (yas-global-mode 1)
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   :mode ("\\.yasnippet" . snippet-mode))
-
-(use-package company
-  :ensure t
-  :defer t
-  :init (global-company-mode))
 
 (use-package gruvbox-theme
   :ensure t
@@ -156,21 +125,47 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+(use-package irony
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  :config
+  ;; replace the `completion-at-point' and `complete-symbol' bindings in
+  ;; irony-mode's buffers by irony-mode's function
+  (defun my-irony-mode-hook ()
+    (define-key irony-mode-map [remap completion-at-point]
+      'irony-completion-at-point-async)
+    (define-key irony-mode-map [remap complete-symbol]
+      'irony-completion-at-point-async))
+  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
-(use-package helm-core
-  :ensure t)
-
-(use-package helm-config
-  :ensure t)
+(use-package company
+  :ensure t
+  :defer t
+  :init (add-hook 'after-init-hook 'global-company-mode)
+  :config
+  (use-package company-irony :ensure t :defer t)
+  (setq company-idle-delay              nil
+	company-minimum-prefix-length   2
+	company-show-numbers            t
+	company-tooltip-limit           20
+	company-dabbrev-downcase        nil
+	company-backends                '((company-irony company-gtags))
+	)
+  :bind ("C-;" . company-complete-common))
 
 (use-package helm
   :ensure t
   :bind (("M-a" . helm-M-x)
-         ;; ("C-x C-f" . helm-find-files)
-         ;; ("C-x f" . helm-recentf)
+         ("C-x C-f" . helm-find-files)
+         ("C-x f" . helm-recentf)
          ;; ("C-SPC" . helm-dabbrev)
-         ;; ("M-y" . helm-show-kill-ring)
-         ;; ("C-x b" . helm-buffers-list)
+         ("M-y" . helm-show-kill-ring)
+         ("C-x b" . helm-buffers-list)
 	 )
   :bind (:map helm-map
 	      ("M-i" . helm-previous-line)
@@ -178,24 +173,52 @@
 	      ("M-I" . helm-previous-page)
 	      ("M-K" . helm-next-page)
 	      ("M-h" . helm-beginning-of-buffer)
-	      ("M-H" . helm-end-of-buffer))
+	      ("M-H" . helm-end-of-buffer)
+	      ("<tab>" . helm-execute-persistent-action))
   :config (progn
 	    (setq helm-buffers-fuzzy-matching t)
             (helm-mode 1)))
 
-(use-package helm-descbinds
-  :ensure t
-  :bind ("C-h b" . helm-descbinds))
+;; (use-package helm-config
+;;   :ensure helm
+;;   :after helm
+;;   :config
+;;   (bind-key "C-c h" helm-command-prefix)
+;;   (unbind-key "C-x c"))
 
-(use-package helm-files
-  :bind (:map helm-find-files-map
-	      ("M-i" . nil)
-	      ("M-k" . nil)
-	      ("M-I" . nil)
-	      ("M-K" . nil)
-	      ("M-h" . nil)
-	      ("M-H" . nil)))
-(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+;; (use-package helm-company
+;;   :ensure t
+;;   :commands (helm-company)
+;;   :config (company-mode))
+
+;; (use-package helm-descbinds
+;;   :ensure t
+;;   :bind ("C-h b" . helm-descbinds))
+
+;; (use-package helm-files
+;;   :bind (:map helm-find-files-map
+;; 	      ("M-i" . nil)
+;; 	      ("M-k" . nil)
+;; 	      ("M-I" . nil)
+;; 	      ("M-K" . nil)
+;; 	      ("M-h" . nil)
+;; 	      ("M-H" . nil))
+;;   :init
+;;   (ido-mode -1)) ;; Turn off ido mode in case I enabled it accidentally
+
+;; (use-package projectile
+;;   :ensure t
+;;   :bind (("C-x s" . projectile-switch-open-project)
+;; 	 ("C-x p" . projectile-switch-project))
+;;   :config
+;;   (projectile-global-mode)
+;;   (setq projectile-enable-caching t))
+
+;; (use-package helm-projectile
+;;   :ensure t
+;;   :bind ("M-t" . helm-projectile-find-file)
+;;   :config
+;;   (helm-projectile-on))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Major Modes
@@ -289,3 +312,26 @@
           (message "Deleted file %s" filename)
           (kill-buffer))))))
 (global-set-key (kbd "C-x <deletechar>")  'delete-file-and-buffer)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (company-irony helm-descbinds helm helm-config helm-core markdown-mode gruvbox-theme company yasnippet magit irony beacon expand-region ace-jump-mode multiple-cursors exec-path-from-shell use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+; No indent in namespaces
+(c-set-offset 'innamespace 0)
+
+(defun vlad-c-style()
+  (c-set-offset 'innamespace '0)
+)
+
+(add-hook 'c-mode-hook 'vlad-cc-style)
