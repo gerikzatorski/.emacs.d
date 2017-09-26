@@ -4,9 +4,20 @@
 ;; Description: Gerik Zatorski's emacs configuration
 ;; Author: Gerik Zatorski
 
+;; TABLE OF CONTENTS
+;; Basic Settings
+;; Key Bindings
+;; Setup use-package
+;; Packages
+;; Miscellaneous
+;; Custom-Set-Variables (auto added)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; maximize screen on startup
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; no splash screen 
 (setq inhibit-startup-message t)
@@ -33,6 +44,10 @@
 
 ;; sentences end with a single space, not two
 (setq sentence-end-double-space nil)
+
+;; auto close bracket insertion. New in emacs 24
+(electric-pair-mode 1)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Key Bindings 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -62,6 +77,7 @@
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
 
@@ -89,10 +105,19 @@
 (use-package multiple-cursors
   :ensure t
   :bind ("C-c m c" . mc/edit-lines))
-    
-(use-package ace-jump-mode
+
+(use-package avy
   :ensure t
-  :bind ("C-c SPC" . ace-jump-mode))
+  :pin melpa-stable
+  :bind
+  ("M-'" . avy-goto-word-or-subword-1)
+  :config
+  (setq avy-background t))
+
+(use-package ace-window
+  :ensure t
+  :bind ("M-p" . ace-window)
+  :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 (use-package expand-region
   :ensure t
@@ -108,7 +133,8 @@
 
 (use-package yasnippet
   :ensure t
-  :init (yas-global-mode 1)
+  :init
+  (yas-global-mode 1)
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   :mode ("\\.yasnippet" . snippet-mode))
 
@@ -117,22 +143,34 @@
   :defer t
   :init (load-theme 'gruvbox t))
 
-(use-package markdown-mode
+(use-package company
   :ensure t
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init (add-hook 'after-init-hook 'global-company-mode)
+  ;; :config
+  ;; (setq company-idle-delay              nil
+  ;; 	company-minimum-prefix-length   2
+  ;; 	company-show-numbers            t
+  ;; 	company-tooltip-limit           20
+  ;; 	company-dabbrev-downcase        nil
+  ;; 	company-backends                '((company-irony company-gtags))
+  ;; 	)
+  :bind ("C-;" . company-complete-common))
 
 (use-package irony
   :ensure t
-  :defer t
   :init
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   :config
+  (use-package company-irony
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-irony))
+  (use-package company-irony-c-headers
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-irony-c-headers))
   ;; replace the `completion-at-point' and `complete-symbol' bindings in
   ;; irony-mode's buffers by irony-mode's function
   (defun my-irony-mode-hook ()
@@ -143,24 +181,9 @@
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
-(use-package company
-  :ensure t
-  :defer t
-  :init (add-hook 'after-init-hook 'global-company-mode)
-  :config
-  (use-package company-irony :ensure t :defer t)
-  (setq company-idle-delay              nil
-	company-minimum-prefix-length   2
-	company-show-numbers            t
-	company-tooltip-limit           20
-	company-dabbrev-downcase        nil
-	company-backends                '((company-irony company-gtags))
-	)
-  :bind ("C-;" . company-complete-common))
-
 (use-package helm
   :ensure t
-  :bind (("M-a" . helm-M-x)
+  :bind (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x f" . helm-recentf)
          ;; ("C-SPC" . helm-dabbrev)
@@ -206,19 +229,19 @@
 ;;   :init
 ;;   (ido-mode -1)) ;; Turn off ido mode in case I enabled it accidentally
 
-;; (use-package projectile
-;;   :ensure t
-;;   :bind (("C-x s" . projectile-switch-open-project)
-;; 	 ("C-x p" . projectile-switch-project))
-;;   :config
-;;   (projectile-global-mode)
-;;   (setq projectile-enable-caching t))
+(use-package projectile
+  :ensure t
+  :bind (("C-x s" . projectile-switch-open-project)
+	 ("C-x p" . projectile-switch-project))
+  :config
+  (projectile-global-mode)
+  (setq projectile-enable-caching t))
 
-;; (use-package helm-projectile
-;;   :ensure t
-;;   :bind ("M-t" . helm-projectile-find-file)
-;;   :config
-;;   (helm-projectile-on))
+(use-package helm-projectile
+  :ensure t
+  :bind ("M-t" . helm-projectile-find-file)
+  :config
+  (helm-projectile-on))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Major Modes
@@ -312,6 +335,11 @@
           (message "Deleted file %s" filename)
           (kill-buffer))))))
 (global-set-key (kbd "C-x <deletechar>")  'delete-file-and-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom-Set-Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -319,19 +347,10 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (company-irony helm-descbinds helm helm-config helm-core markdown-mode gruvbox-theme company yasnippet magit irony beacon expand-region ace-jump-mode multiple-cursors exec-path-from-shell use-package))))
+    (ace-window avy company-irony helm-descbinds helm helm-config helm-core markdown-mode gruvbox-theme company yasnippet magit irony beacon expand-region ace-jump-mode multiple-cursors exec-path-from-shell use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-; No indent in namespaces
-(c-set-offset 'innamespace 0)
-
-(defun vlad-c-style()
-  (c-set-offset 'innamespace '0)
-)
-
-(add-hook 'c-mode-hook 'vlad-cc-style)
