@@ -29,8 +29,8 @@
 ;; (add-to-list 'load-path settings-dir)
 
 ;; set org variables for global todo
-(setq org-agenda-files (list "~/org/school.org"
-			     "~/org/home.org"))
+(setq org-agenda-files (list "~/Dropbox/org/school.org"
+			     "~/Dropbox/org/home.org"))
 
 ;; handle other .el files
 ;;(add-to-list 'load-path' "~/.emacs.d/functions.el")
@@ -138,10 +138,18 @@
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   :mode ("\\.yasnippet" . snippet-mode))
 
-(use-package gruvbox-theme
+;; (use-package gruvbox-theme
+;;   :ensure t
+;;   :defer t
+;;   :init (load-theme 'gruvbox t))
+
+(use-package ample-theme
   :ensure t
-  :defer t
-  :init (load-theme 'gruvbox t))
+  :init (progn (load-theme 'ample t t)
+               (load-theme 'ample-flat t t)
+               (load-theme 'ample-light t t)
+               (enable-theme 'ample-flat))
+  :defer t)
 
 (use-package company
   :ensure t
@@ -232,7 +240,8 @@
 (use-package projectile
   :ensure t
   :bind (("C-x s" . projectile-switch-open-project)
-	 ("C-x p" . projectile-switch-project))
+	 ("C-x p" . projectile-switch-project)
+	 ("C-c c w" . projectile-find-other-file-other-window))
   :config
   (projectile-global-mode)
   (setq projectile-enable-caching t))
@@ -345,6 +354,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("938d8c186c4cb9ec4a8d8bc159285e0d0f07bad46edf20aa469a89d0d2a586ea" "6de7c03d614033c0403657409313d5f01202361e35490a3404e33e46663c2596" "5673c365c8679addfb44f3d91d6b880c3266766b605c99f2d9b00745202e75f6" default)))
  '(package-selected-packages
    (quote
     (ace-window avy company-irony helm-descbinds helm helm-config helm-core markdown-mode gruvbox-theme company yasnippet magit irony beacon expand-region ace-jump-mode multiple-cursors exec-path-from-shell use-package))))

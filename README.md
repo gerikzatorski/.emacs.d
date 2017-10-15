@@ -1,6 +1,19 @@
 # .emacs.d
 
+## Common Keyboard Shortcuts
+
+* [C-x C-;] comment line(s)
+* []
+* []
+
+## Extra Init Steps
+
+* run M-x irony-install-server
+
 ## Packages to Consider:
+
+* helm-swoop
+* company-irony-c-headers
 
 * uniquify
 * idomenu
@@ -12,8 +25,4 @@
 * magit
 * avy (like ace-jump-mode)
 * smartparens
-* helm
 
-## Built-Ins that I should know
-
-* CEDET

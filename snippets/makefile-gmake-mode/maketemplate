@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: maketemplate1
+# key: make1
+# --
+CC = gcc
+CFLAGS = -I
+
+SOURCES = ${0:source_file}
+
+all:
+	$(CC) $(SOURCES) -o main
+

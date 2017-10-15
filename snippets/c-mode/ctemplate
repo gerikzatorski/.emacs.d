@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: ctemplate
-# key: ctemplate
-# --
-#include <stdio.h>
-int main( int argc, char** argv ) {
-}
