@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: pass-by-reference-to-const
+# key: prc
+# --
+${1:void} ${2:printNameAndDisplay}(const ${3:Window}& ${4:w}) {
+	  $0
+}
