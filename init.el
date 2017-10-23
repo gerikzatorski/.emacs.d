@@ -148,7 +148,7 @@
   :init (progn (load-theme 'ample t t)
                (load-theme 'ample-flat t t)
                (load-theme 'ample-light t t)
-               (enable-theme 'ample-flat))
+               (enable-theme 'ample))
   :defer t)
 
 (use-package company
@@ -210,32 +210,10 @@
 	    (setq helm-buffers-fuzzy-matching t)
             (helm-mode 1)))
 
-;; (use-package helm-config
-;;   :ensure helm
-;;   :after helm
-;;   :config
-;;   (bind-key "C-c h" helm-command-prefix)
-;;   (unbind-key "C-x c"))
 
-;; (use-package helm-company
-;;   :ensure t
-;;   :commands (helm-company)
-;;   :config (company-mode))
-
-;; (use-package helm-descbinds
-;;   :ensure t
-;;   :bind ("C-h b" . helm-descbinds))
-
-;; (use-package helm-files
-;;   :bind (:map helm-find-files-map
-;; 	      ("M-i" . nil)
-;; 	      ("M-k" . nil)
-;; 	      ("M-I" . nil)
-;; 	      ("M-K" . nil)
-;; 	      ("M-h" . nil)
-;; 	      ("M-H" . nil))
-;;   :init
-;;   (ido-mode -1)) ;; Turn off ido mode in case I enabled it accidentally
+(use-package helm-descbinds
+  :ensure t
+  :bind ("C-h b" . helm-descbinds))
 
 (use-package projectile
   :ensure t
@@ -345,6 +323,22 @@
           (kill-buffer))))))
 (global-set-key (kbd "C-x <deletechar>")  'delete-file-and-buffer)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; C/C++
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (defun my-c-indent-setup ()
+;;   (c-set-offset 'innamespace 0)
+;; (add-hook 'c-mode-hook 'my-c-indent-setup)
+
+;; (defconst my-cc-style
+;;   '("cc-mode"
+;;     (c-offsets-alist . ((innamespace . [0])))))
+;; (c-add-style "my-cc-mode" my-cc-style)
+;; (add-hook 'c++-mode-hook (lambda () (c-set-style "my-cc-style") ) )
+
+(c-set-offset 'innamespace 0)
+	  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom-Set-Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
