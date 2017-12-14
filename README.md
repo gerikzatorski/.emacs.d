@@ -1,28 +1,22 @@
 # .emacs.d
 
-## Common Keyboard Shortcuts
+## Custom Keyboard Shortcuts
 
-* [C-x C-;] comment line(s)
-* []
-* []
+- <kbd>C-x C-;</kbd> Comment or Uncomment Region or Line
+- <kbd>C-x C-r</kbd> Rename Buffer (deletes file with old name)
+- <kbd>C-c d</kbd> Duplicate current line
+- <kbd>C-x <deletechar></kbd> Delete file and buffer
 
 ## Extra Init Steps
 
-* run M-x irony-install-server
+* M-x irony-install-server (did apt-get clang take care of this?)
+* M-x jedi:install-server
 
 ## Packages to Consider:
 
-* helm-swoop
-* company-irony-c-headers
-
-* uniquify
-* idomenu
 * keychord
 * flycheck
 * flx
 * smex
 * workgroups
 * magit
-* avy (like ace-jump-mode)
-* smartparens
-
