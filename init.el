@@ -17,7 +17,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; maximize screen on startup
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; no splash screen 
 (setq inhibit-startup-message t)
@@ -45,9 +45,6 @@
 ;; sentences end with a single space, not two
 (setq sentence-end-double-space nil)
 
-;; auto close bracket insertion. New in emacs 24
-(electric-pair-mode 1)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Key Bindings 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,8 +54,8 @@
 
 ;; Bind common commands to function keys
 (global-set-key [f1] 'help-command)
-(global-set-key [f2] 'undo)
-(global-set-key [f7] 'save-buffer)
+;; (global-set-key [f2] 'undo)
+;; (global-set-key [f7] 'save-buffer)
 
 ;; Make F8 be "start macro", F9 be "end macro", F10 be "execute macro"
 (global-set-key [f8] 'start-kbd-macro)
@@ -89,7 +86,6 @@
 ;; Enable use-package
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
 (require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -138,11 +134,6 @@
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   :mode ("\\.yasnippet" . snippet-mode))
 
-;; (use-package gruvbox-theme
-;;   :ensure t
-;;   :defer t
-;;   :init (load-theme 'gruvbox t))
-
 (use-package ample-theme
   :ensure t
   :init (progn (load-theme 'ample t t)
@@ -154,14 +145,14 @@
 (use-package company
   :ensure t
   :init (add-hook 'after-init-hook 'global-company-mode)
-  ;; :config
-  ;; (setq company-idle-delay              nil
+  :config
+  (setq company-idle-delay              nil
   ;; 	company-minimum-prefix-length   2
   ;; 	company-show-numbers            t
   ;; 	company-tooltip-limit           20
   ;; 	company-dabbrev-downcase        nil
   ;; 	company-backends                '((company-irony company-gtags))
-  ;; 	)
+  	)
   :bind ("C-;" . company-complete-common))
 
 (use-package irony
@@ -171,10 +162,10 @@
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   :config
-  (use-package company-irony
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-irony))
+  ;; (use-package company-irony
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-to-list 'company-backends 'company-irony))
   (use-package company-irony-c-headers
     :ensure t
     :config
@@ -228,7 +219,8 @@
   :ensure t
   :bind ("M-t" . helm-projectile-find-file)
   :config
-  (helm-projectile-on))
+  (helm-projectile-on)
+  (setq projectile-switch-project-action 'helm-projectile-find-file))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Major Modes
