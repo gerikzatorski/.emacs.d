@@ -2,7 +2,10 @@
   :ensure t
   :pin melpa-stable
   :bind
-  ("M-'" . avy-goto-word-or-subword-1)
+  ("M-g c" . avy-goto-char)
+  ("M-g w" . avy-goto-word-1)
+  ("M-g l" . avy-goto-line)
+  
   :config
   (setq avy-background t))
 

@@ -2,7 +2,7 @@
   :ensure    helm
 
   :config    (setq helm-ff-transformer-show-only-basename nil
-                   helm-boring-file-regexp-list           '("\\.git$")
+                   helm-boring-file-regexp-list           '("\\.pyc$" "\\.git$")
                    helm-yank-symbol-first                 t
                    helm-buffers-fuzzy-matching            t
                    helm-ff-auto-update-initial-value      t
@@ -24,7 +24,10 @@
 
                (use-package helm-projectile
                  :ensure    helm-projectile
-                 :bind      ("C-c h" . helm-projectile))
+		 :init      (progn
+			      (require 'helm-projectile)
+			      (helm-projectile-on)))
+	                      ;; replaced projectile commands with helm versions
 
                (use-package helm-swoop
                  :ensure    helm-swoop

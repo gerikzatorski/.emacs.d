@@ -1,4 +1,4 @@
-;; -*- Mode: Emacs-Lisp -*-
+; -*- Mode: Emacs-Lisp -*-
 
 ;; Filename: init.el
 ;; Description: Gerik Zatorski's emacs configuration
@@ -45,9 +45,6 @@
 ;; Key Bindings 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Bind imenu
-(global-set-key (kbd "M-i") 'imenu)
-
 ;; Bind common commands to function keys
 (global-set-key [f1] 'help-command)
 ;; (global-set-key [f2] 'undo)
@@ -67,7 +64,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
@@ -100,6 +97,7 @@
 (load "~/.emacs.d/config/init-ace-window.el")
 (load "~/.emacs.d/config/init-expand-region.el")
 (load "~/.emacs.d/config/init-projectile.el")
+(load "~/.emacs.d/config/init-magit.el")
 
 ;; config modes
 (load "~/.emacs.d/config/init-irony.el")

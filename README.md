@@ -4,8 +4,9 @@
 
 - <kbd>C-x C-;</kbd> Comment or Uncomment Region or Line
 - <kbd>C-x C-r</kbd> Rename Buffer (deletes file with old name)
-- <kbd>C-c d</kbd> Duplicate current line
-- <kbd>C-x <deletechar></kbd> Delete file and buffer
+- <kbd>C-c d</kbd> Duplicate Current Line
+- <kbd>C-x <deletechar></kbd> Delete File and Buffer
+- <kbd>C-c I</kbd> Find User Init File
 
 ## Extra Init Steps
 

@@ -3,6 +3,7 @@
 ;; - Rename Buffer
 ;; - Duplicate current line
 ;; - Delete File and Buffer
+;; - Find User Init File
 
 ;; Comment Line
 ;; http://stackoverflow.com/a/9697222/3105650
@@ -81,4 +82,13 @@
           (kill-buffer))))))
 (global-set-key (kbd "C-x <deletechar>")  'delete-file-and-buffer)
 
+;; Find User Init File
+;; http://emacsredux.com/blog/2013/05/18/instant-access-to-init-dot-el/
+(defun find-user-init-file ()
+  "Edit the `user-init-file', in another window."
+  (interactive)
+  (find-file-other-window user-init-file))
+(global-set-key (kbd "C-c I") 'find-user-init-file)
+
 (provide 'init-functions)
+
