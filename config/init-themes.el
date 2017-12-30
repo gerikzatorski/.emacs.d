@@ -4,6 +4,9 @@
                (load-theme 'ample-flat t t)
                (load-theme 'ample-light t t)
                (enable-theme 'ample))
+
+(use-package gruvbox-theme
+  :ensure t
   :defer t)
 
 (provide 'init-themes)
