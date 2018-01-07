@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: syspath
+# key: syspath
+# --
+import sys
+sys.path.append('../../')
