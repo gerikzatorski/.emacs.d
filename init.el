@@ -5,12 +5,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; determine operating system
-;; http://stackoverflow.com/questions/1817257/how-to-determine-operating-system-in-elisp
+;; http://ergoemacs.org/emacs/elisp_determine_OS_version.html
 (setq windows nil mac nil linux nil)
 (cond
-  ((eq system-type 'windows-nt) (setq windows t))
-  ((eq system-type 'darwin) (setq mac t))
-  (t (setq linux t)))
+ ((string-equal system-type "windows-nt") ; Microsoft Windows
+  (progn
+    (setq windows t)
+    (message "Microsoft Windows")))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (progn
+    (setq mac t)
+    (message "Mac OS X")))
+ ((string-equal system-type "gnu/linux") ; linux
+  (progn
+    (setq linux t)
+    (message "Linux"))))
+
+;; (message "The name of this buffer is: %s." (sys-os))
+;; (message "Is this linux? %s" ("linux"))
+;; (message "Is this mac? %s" ("mac"))
 
 ;; maximize screen on startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
