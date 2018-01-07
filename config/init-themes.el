@@ -3,7 +3,7 @@
   :init (progn (load-theme 'ample t t)
                (load-theme 'ample-flat t t)
                (load-theme 'ample-light t t)
-               (enable-theme 'ample))
+               (enable-theme 'ample)))
 
 (use-package gruvbox-theme
   :ensure t

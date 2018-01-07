@@ -41,6 +41,9 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
+;; highlights paired parens
+(show-paren-mode 1)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Key Bindings 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

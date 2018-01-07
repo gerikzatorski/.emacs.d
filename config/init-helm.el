@@ -5,7 +5,7 @@
                    helm-boring-file-regexp-list           '("\\.pyc$" "\\.git$")
                    helm-yank-symbol-first                 t
                    helm-buffers-fuzzy-matching            t
-                   helm-ff-auto-update-initial-value      t
+                   helm-ff-auto-update-initial-value      nil
                    helm-input-idle-delay                  0.1
                    helm-idle-delay                        0.1)
 
