@@ -1,17 +1,16 @@
 ; -*- Mode: Emacs-Lisp -*-
 
-;; Filename: init.el
-;; Description: Gerik Zatorski's emacs configuration
-;; Author: Gerik Zatorski
-
-;; TABLE OF CONTENTS
-;; Basic Settings
-;; Key Bindings
-;; Packages
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; determine operating system
+;; http://stackoverflow.com/questions/1817257/how-to-determine-operating-system-in-elisp
+(setq windows nil mac nil linux nil)
+(cond
+  ((eq system-type 'windows-nt) (setq windows t))
+  ((eq system-type 'darwin) (setq mac t))
+  (t (setq linux t)))
 
 ;; maximize screen on startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -30,9 +29,6 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-;; sentences end with a single space, not two
-(setq sentence-end-double-space nil)
-
 ;; Changes all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq confirm-kill-emacs #'y-or-n-p)
@@ -40,6 +36,12 @@
 ;; Custom configuration set by Emacs
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
+
+;; other defaults
+(setq sentence-end-double-space nil)
+(setq show-trailing-whitespace t)
+(setq indicate-empty-lines t)
+(setq indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Key Bindings 
