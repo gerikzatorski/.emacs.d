@@ -4,6 +4,11 @@
                (load-theme 'ample-flat t t)
                (load-theme 'ample-light t t)
                (enable-theme 'ample)))
+  ;; :init (progn (load-theme 'ample t t)
+  ;;              (load-theme 'ample-flat t t)
+  ;;              (load-theme 'ample-light t t)
+  ;;              (enable-theme 'ample))
+  :defer t)
 
 (use-package gruvbox-theme
   :ensure t
