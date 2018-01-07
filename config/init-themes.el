@@ -2,12 +2,7 @@
   :ensure t
   :init (progn (load-theme 'ample t t)
                (load-theme 'ample-flat t t)
-               (load-theme 'ample-light t t)
-               (enable-theme 'ample)))
-  ;; :init (progn (load-theme 'ample t t)
-  ;;              (load-theme 'ample-flat t t)
-  ;;              (load-theme 'ample-light t t)
-  ;;              (enable-theme 'ample))
+               (load-theme 'ample-light t t)))
   :defer t)
 
 (use-package gruvbox-theme
