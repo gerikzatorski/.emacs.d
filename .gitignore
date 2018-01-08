@@ -1,2 +1,17 @@
 *~
 .DS_Store
+
+# specific
+.mc-lists.el
+.python-environments/
+
+# specific
+custom.el
+company-statistics-cache.el
+elpa/*
+helm-adaptive-history
+irony/
+projectile-bookmarks.eld
+projectile.cache
+recentf
+session.*
