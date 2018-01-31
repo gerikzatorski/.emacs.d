@@ -6,6 +6,6 @@
                  (file-directory-p (concat basedir f)))
             (add-to-list 'custom-theme-load-path (concat basedir f)))))
 
-(load-theme 'material t)
+(load-theme 'ample t)
 
 (provide 'init-themes)
