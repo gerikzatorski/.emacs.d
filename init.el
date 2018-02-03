@@ -21,6 +21,12 @@
     (setq linux t)
     (message "Linux"))))
 
+;;; I prefer cmd key for meta
+(setq mac-option-key-is-meta nil
+      mac-command-key-is-meta t
+      mac-command-modifier 'meta
+      mac-option-modifier 'none)
+
 ;; (message "The name of this buffer is: %s." (sys-os))
 ;; (message "Is this linux? %s" ("linux"))
 ;; (message "Is this mac? %s" ("mac"))
