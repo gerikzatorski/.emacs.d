@@ -4,3 +4,6 @@
 [submodule "themes/ample"]
 	path = themes/ample
 	url = git@github.com:jordonbiondo/ample-theme.git
+[submodule "packages/change-inner"]
+	path = packages/change-inner
+	url = git@github.com:magnars/change-inner.el.git

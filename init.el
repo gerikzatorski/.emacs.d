@@ -89,7 +89,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
@@ -128,7 +128,10 @@
 (load "~/.emacs.d/config/init-irony.el")
 (load "~/.emacs.d/config/init-markdown.el")
 
-;; config misc
+;; manually installed packages
+(load "~/.emacs.d/config/manual-packages.el")
+
+;; config misc functions
 (load "~/.emacs.d/config/init-functions.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
