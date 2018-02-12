@@ -6,6 +6,9 @@
                  (file-directory-p (concat basedir f)))
             (add-to-list 'custom-theme-load-path (concat basedir f)))))
 
-(load-theme 'ample t)
+(use-package solarized-theme
+  :ensure t)
+
+(load-theme 'solarized-dark t)
 
 (provide 'init-themes)

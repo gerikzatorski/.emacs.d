@@ -31,6 +31,11 @@
 ;; (message "Is this linux? %s" ("linux"))
 ;; (message "Is this mac? %s" ("mac"))
 
+;; set default font
+(add-to-list 'default-frame-alist '(font . "Consolas" ))
+;; alt
+;; (set-face-attribute 'default t :font FONT )
+
 ;; maximize screen on startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
