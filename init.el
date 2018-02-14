@@ -272,6 +272,9 @@
 
 (load-theme 'solarized-dark t)
 
+(use-package rainbow-mode
+  :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -286,7 +289,11 @@
   :init
   (yas-global-mode 1)
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
-  :mode ("\\.yasnippet" . snippet-mode))
+  :mode ("\\.yasnippet" . snippet-mode)
+  :config
+  (use-package yasnippet-snippets
+    :ensure t))
+
 
 (use-package avy
   :ensure t
