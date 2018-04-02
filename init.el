@@ -31,6 +31,7 @@
 ;; Enable use-package
 (eval-when-compile
   (require 'use-package))
+
 (require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -59,6 +60,10 @@
 
 ;; default font
 (add-to-list 'default-frame-alist '(font . "Consolas" ))
+
+;; set a default font
+(when (member "Consolas" (font-family-list))
+  (set-face-attribute 'default nil :font "Consolas"))
 
 ;;; mac cmd key binded to meta
 (setq mac-option-key-is-meta nil
