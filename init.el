@@ -59,7 +59,7 @@
 ;;     (message "Linux"))))
 
 ;; default font
-(add-to-list 'default-frame-alist '(font . "Consolas" ))
+;; (add-to-list 'default-frame-alist '(font . "Consolas" ))
 
 ;; set a default font
 (when (member "Consolas" (font-family-list))
@@ -272,11 +272,12 @@
                  (file-directory-p (concat basedir f)))
             (add-to-list 'custom-theme-load-path (concat basedir f)))))
 
-(use-package solarized-theme
+(use-package ample-theme
   :ensure t)
 
-(load-theme 'solarized-dark t)
+(load-theme 'ample t)
 
+;; visualize color codes
 (use-package rainbow-mode
   :ensure t)
 
