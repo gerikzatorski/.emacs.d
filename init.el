@@ -3,7 +3,9 @@
 ;; no splash screen
 (setq inhibit-startup-message t)
 ;; maximize screen quickly
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; hide toolbar
+(tool-bar-mode -1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Setup
@@ -15,7 +17,7 @@
 (setq package-enable-at-startup nil)
 
 ;; add repositories
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
@@ -32,10 +34,11 @@
 (eval-when-compile
   (require 'use-package))
 
+;; needed for use-package key bindings
 (require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; System / Platform / OS
+;; System/Platform/OS Specific
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun osx-p ()
@@ -44,26 +47,9 @@
 (defun linux-p ()
   "Check if a system is running Linux."
   (eq system-type 'gnu/linux))
-
-;; determine operating system
-;; http://ergoemacs.org/emacs/elisp_determine_OS_version.html
-;; (setq windows nil mac nil linux nil)
-;; (cond
-;;  ((string-equal system-type "darwin") ; Mac OS X
-;;   (progn
-;;     (setq mac t)
-;;     (message "Mac OS X")))
-;;  ((string-equal system-type "gnu/linux") ; linux
-;;   (progn
-;;     (setq linux t)
-;;     (message "Linux"))))
-
-;; default font
-;; (add-to-list 'default-frame-alist '(font . "Consolas" ))
-
-;; set a default font
-(when (member "Consolas" (font-family-list))
-  (set-face-attribute 'default nil :font "Consolas"))
+(defun win-p ()
+  "Check if a system is running Windows."
+  (eq system-type 'gnu/windows-nt))
 
 ;;; mac cmd key binded to meta
 (setq mac-option-key-is-meta nil
@@ -74,10 +60,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Paths
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; set org variables for global todo
-(setq org-agenda-files (list "~/Dropbox/org/school.org"
-			     "~/Dropbox/org/home.org"))
 
 ;; store all backup and autosave files in the system's temp dir
 ;; https://www.emacswiki.org/emacs/BackupDirectory
@@ -97,130 +79,65 @@
 ;; highlights paired parens
 (show-paren-mode 1)
 
+;; Changes all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq confirm-kill-emacs #'y-or-n-p)
+
+;; other
 (setq sentence-end-double-space nil)
 (setq show-trailing-whitespace t)
 (setq indicate-empty-lines t)
 (setq indent-tabs-mode nil)
 
-;; Changes all yes/no questions to y/n type
-(fset 'yes-or-no-p 'y-or-n-p)
-(setq confirm-kill-emacs #'y-or-n-p)
-
-;; Make F8 be "start macro", F9 be "end macro", F10 be "execute macro"
-;; (global-set-key [f8] 'start-kbd-macro)
-;; (global-set-key [f9] 'end-kbd-macro)
-;; (global-set-key [f10] 'call-last-kbd-macro)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Helm
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package helm
-  :ensure    helm
-
-  :config    (setq helm-ff-transformer-show-only-basename nil
-                   helm-boring-file-regexp-list           '("\\.pyc$" "\\.git$")
-                   helm-yank-symbol-first                 t
-                   helm-buffers-fuzzy-matching            t
-                   helm-ff-auto-update-initial-value      nil
-                   helm-input-idle-delay                  0.1
-                   helm-idle-delay                        0.1)
-
-  :init      (progn
-               (require 'helm-config)
-               (helm-mode t)
-               (helm-adaptive-mode t)
-
-               (use-package helm-ag
-                 :ensure    helm-ag
-                 :bind      ("C-c a" . helm-ag))
-
-               (use-package helm-descbinds
-                 :ensure    helm-descbinds
-                 :bind      ("C-h b"   . helm-descbinds))
-
-               (use-package helm-projectile
-                 :ensure    helm-projectile
-		 :init      (progn
-			      (require 'helm-projectile)
-			      (helm-projectile-on)))
-	                      ;; replaced projectile commands with helm versions
-
-               (use-package helm-swoop
-                 :ensure    helm-swoop
-                 :bind      (("C-c o" . helm-swoop)
-                             ("C-c M-o" . helm-multi-swoop)))
-
-               (bind-key "C-c C-SPC" 'helm-ff-run-toggle-auto-update helm-find-files-map))
-
-  :bind (("M-x"     . helm-M-x)
-	 ("M-y"     . helm-show-kill-ring)
-	 ("C-x r l" . helm-bookmarks)
-         ("C-x C-f" . helm-find-files)
-         ("C-h i"   . helm-google-suggest)
-         ("C-h a"   . helm-apropos)
-         ("C-x p" .   helm-top)
-         ("C-x C-b" . helm-buffers-list))
-
-  :bind (:map helm-map
-	      ("M-i" . helm-previous-line)
-	      ("M-k" . helm-next-line)
-	      ("M-I" . helm-previous-page)
-	      ("M-K" . helm-next-page)
-	      ("M-h" . helm-beginning-of-buffer)
-	      ("M-H" . helm-end-of-buffer)
-	      ("<tab>" . helm-execute-persistent-action)))
-
-  ;; :diminish helm-mode)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Company
+;; Auto Completion
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package company
   :ensure t
-  :init (add-hook 'after-init-hook 'global-company-mode)
-  :bind ("C-;" . company-complete-common)
+  :diminish
   :config
-  (setq company-idle-delay nil))
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-idle-delay t)
 
-(use-package company-irony-c-headers
-  :ensure t
-  :config
-  (add-to-list 'company-backends 'company-irony-c-headers))
+  (use-package company-irony-c-headers
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-irony-c-headers))
 
-(use-package company-irony
-  :ensure t
-  :config
-  (add-to-list 'company-backends 'company-irony))
+  (use-package company-irony
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-irony))
 
-(use-package company-jedi
-  :ensure t
-  :init
-  (setq company-jedi-python-bin "python2")
-  :config
-  (add-to-list 'company-backends 'company-jedi))
+  (use-package company-jedi
+    :ensure t
+    :init
+    (setq company-jedi-python-bin "python2")
+    :config
+    (add-to-list 'company-backends 'company-jedi))
 
-(use-package company-web
-  :ensure t
-  :bind ("C-c w" . company-web-html)
-  :config
-  (add-to-list 'company-backends 'company-web-html))
+  (use-package company-web
+    :ensure t
+    :bind ("C-c w" . company-web-html)
+    :config
+    (add-to-list 'company-backends 'company-web-html))
 
-(use-package company-statistics
-  :ensure t
-  :config
-  (add-hook 'after-init-hook 'company-statistics-mode))
+  (use-package company-statistics
+    :ensure t
+    :config
+    (add-hook 'after-init-hook 'company-statistics-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Project Managements
+;; Project Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package projectile
   :ensure t
   :config
   (projectile-global-mode)
-  (setq projectile-enable-caching t))
+  (setq projectile-enable-caching t)
+  (setq projectile-completion-system 'ivy))
 
 (use-package magit
   :ensure t
@@ -253,29 +170,49 @@
   :defer     t
   :mode      ("\\.\\(markdown\\|mdown\\|md\\)$" . markdown-mode))
 
+(use-package groovy-mode
+  :ensure t
+  :config
+  (defun my-groovy-mode-hook ()
+    ;; Indent groovy code four spaces instead of two
+    (setq c-basic-offset 4))
+  (add-hook 'groovy-mode-hook #'my-groovy-mode-hook)
+  :mode
+  (("Jenkinsfile\\'" . groovy-mode)))
+
+(use-package cmake-mode
+  :ensure t
+  :mode "CMakeLists.txt")
+
+(use-package csharp-mode
+  :ensure t)
+
+(use-package dockerfile-mode
+  :ensure t
+  :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; set a default font
+;; (when (member "Consolas" (font-family-list))
+;;   (set-face-attribute 'default nil :font "Consolas"))
+
+;; (set-frame-font "Consolas" nil t)
+
+(use-package ample-theme
+  :ensure t
+  :init (load-theme 'ample t))
+
+(use-package apropospriate-theme
+  :ensure t)
 
 (use-package beacon
  :ensure t
  :config
  (beacon-mode 1)
  (setq beacon-color "#666600"))
-
-;; add themes recursively from themes directory
-;; https://www.emacswiki.org/emacs/CustomThemes
-(let ((basedir "~/.emacs.d/themes/"))
-      (dolist (f (directory-files basedir))
-        (if (and (not (or (equal f ".") (equal f "..")))
-                 (file-directory-p (concat basedir f)))
-            (add-to-list 'custom-theme-load-path (concat basedir f)))))
-
-(use-package ample-theme
-  :ensure t)
-
-(load-theme 'ample t)
 
 ;; visualize color codes
 (use-package rainbow-mode
@@ -300,14 +237,43 @@
   (use-package yasnippet-snippets
     :ensure t))
 
+(use-package smex
+  :ensure t)
+
+(use-package ivy
+  :ensure t
+  :diminish
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t  ; add recent files and bookmarks to the ivy-switch-buffer
+        ivy-count-format "%d/%d ") ; ivy prompt formatting
+  :bind
+  ("C-c C-r" . ivy-resume))
+
+;; TODO
+;; (use-package ivy-hydra
+;;   :ensure t)
+
+(use-package swiper
+  :ensure t
+  :bind
+  ("C-s" . swiper))
+
+(use-package counsel
+  :ensure t
+  :bind
+  ("M-x" . counsel-M-x))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-mode 1))
 
 (use-package avy
   :ensure t
   :pin melpa-stable
   :bind
-  ("M-g c" . avy-goto-char)
-  ("M-g w" . avy-goto-word-1)
-  ("M-g l" . avy-goto-line)
+  ("C-;" . avy-goto-char-2)
   :config
   (setq avy-background t))
 
@@ -330,11 +296,66 @@
   ("C-=" . er/expand-region)
   ("C--" . er/contract-region))
 
+;; (use-package flycheck
+;;   :ensure t
+;;   :init
+;;   (global-flycheck-mode t))
+
+(use-package google-this
+  :ensure t
+  :diminish
+  :config
+  (google-this-mode 1))
+
+(use-package neotree
+  :ensure t
+  :bind (("<f2>" . neotree-toggle))
+  :init
+  (progn
+    ;; Every time when the neotree window is opened, it will try to find current
+    ;; file and jump to node.
+    (setq-default neo-smart-open t)
+    ;; Do not allow neotree to be the only open window
+    (setq-default neo-dont-be-alone t))
+  :config
+  (setq neo-theme 'nerd)) ; 'classic, 'nerd, 'ascii, 'arrow
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+					;            Org Mode Stuff           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq org-startup-folded nil)
+
+(use-package org-bullets
+    :ensure t
+    :config
+    (setq org-bullets-bullet-list '("∙"))
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;; todo: review
+;; (setq org-startup-indented t
+;;       org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+;;       org-ellipsis " - " ;; folding symbol
+;;       org-pretty-entities t
+;;       org-hide-emphasis-markers t ;; show actually italicized text instead of /italicized text/
+;;       org-agenda-block-separator ""
+;;       org-fontify-whole-heading-line t
+;;       org-fontify-done-headline t
+;;       org-fontify-quote-and-verse-blocks t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+					;             Test Packges            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; manually installed packages
-(add-to-list 'load-path "~/.emacs.d/packages/change-inner/")
-(use-package change-inner
-  :bind (("M-i"     . change-inner)
-         ("M-o M-o" . change-outer)))
+;; (add-to-list 'load-path "~/.emacs.d/packages/change-inner/")
+;; (use-package change-inner
+;;   :bind (("M-i"     . change-inner)
+;;          ("M-o M-o" . change-outer)))
+
+;; (use-package neotree
+;;   :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Major mode based on extension
