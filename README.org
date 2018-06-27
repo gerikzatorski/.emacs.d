@@ -5,6 +5,42 @@
 - M-x irony-install-server (did apt-get clang take care of this?)
 - M-x jedi:install-server
 
+* Package Information
+
+** ivy / counsel / swiper
+
+   [[https://github.com/abo-abo/swiper][github repo]]
+
+   Ivy is a generic completion frontend for Emacs.
+   Counsel is a collection of ivy-enhanced versions of common emacs commands.
+   Swiper is like isearch with an overview.
+
+** avy
+
+   [[https://github.com/abo-abo/avy][github repo]]
+
+   Avy is a gnu emacs package for jumping to visible text similar to ace-jump-mode or vim-easymotion.
+
+** company
+
+   Source code autocompletion.
+
+** projectile
+
+   Project management stuff.
+
+** magit
+
+   Magit provides emacs with git integration.
+
+** yasnippet
+
+** multiple-cursors
+
+** expand-region
+
+** avy
+
 * Platform Specific
 
 ** Ubuntu
@@ -17,14 +53,6 @@ CMD key is bound as Meta
       mac-option-modifier 'none)
 #+END_SRC
 
-* Language Specific
-
-** C/C++ Editor
-- irony mode
-- company mode
-
-** Python Editor
-
 * Custom Function Shortcuts
 
 - <kbd>C-x C-;</kbd> Comment or Uncomment Region or Line
@@ -32,4 +60,3 @@ CMD key is bound as Meta
 - <kbd>C-c d</kbd> Duplicate Current Line
 - <kbd>C-x <deletechar></kbd> Delete File and Buffer
 - <kbd>C-c I</kbd> Find User Init File
-

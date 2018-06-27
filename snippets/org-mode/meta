@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: metadata
+# key: meta
+# --
+#+TITLE:     ${title}
+#+AUTHOR:    ${Gerik Zatorski}
+
+$0

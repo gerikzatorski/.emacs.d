@@ -237,9 +237,6 @@
   (use-package yasnippet-snippets
     :ensure t))
 
-(use-package smex
-  :ensure t)
-
 (use-package ivy
   :ensure t
   :diminish
@@ -250,19 +247,16 @@
   :bind
   ("C-c C-r" . ivy-resume))
 
-;; TODO
-;; (use-package ivy-hydra
-;;   :ensure t)
-
 (use-package swiper
   :ensure t
   :bind
-  ("C-s" . swiper))
+  ("C-s" . swiper)  ; remapping isearch-forward
+  ("C-r" . swiper)) ; remapping isearch-backward
 
 (use-package counsel
   :ensure t
   :bind
-  ("M-x" . counsel-M-x))
+  ("M-x" . counsel-M-x)) ; remapping M-x
 
 (use-package counsel-projectile
   :ensure t
@@ -290,59 +284,29 @@
   :bind ("M-p" . ace-window)
   :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
-(use-package expand-region
-  :ensure t
-  :bind
-  ("C-=" . er/expand-region)
-  ("C--" . er/contract-region))
-
-;; (use-package flycheck
+;; (use-package expand-region
 ;;   :ensure t
-;;   :init
-;;   (global-flycheck-mode t))
+;;   :bind
+;;   ("C-=" . er/expand-region)
+;;   ("C--" . er/contract-region))
 
-(use-package google-this
-  :ensure t
-  :diminish
-  :config
-  (google-this-mode 1))
-
-(use-package neotree
-  :ensure t
-  :bind (("<f2>" . neotree-toggle))
-  :init
-  (progn
-    ;; Every time when the neotree window is opened, it will try to find current
-    ;; file and jump to node.
-    (setq-default neo-smart-open t)
-    ;; Do not allow neotree to be the only open window
-    (setq-default neo-dont-be-alone t))
-  :config
-  (setq neo-theme 'nerd)) ; 'classic, 'nerd, 'ascii, 'arrow
-
+;; (use-package google-this
+;;   :ensure t
+;;   :diminish
+;;   :config
+;;   (google-this-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 					;            Org Mode Stuff           ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq org-startup-folded nil)
+;; (setq org-startup-folded nil)
 
 (use-package org-bullets
     :ensure t
     :config
     (setq org-bullets-bullet-list '("∙"))
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-;; todo: review
-;; (setq org-startup-indented t
-;;       org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
-;;       org-ellipsis " - " ;; folding symbol
-;;       org-pretty-entities t
-;;       org-hide-emphasis-markers t ;; show actually italicized text instead of /italicized text/
-;;       org-agenda-block-separator ""
-;;       org-fontify-whole-heading-line t
-;;       org-fontify-done-headline t
-;;       org-fontify-quote-and-verse-blocks t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 					;             Test Packges            ;
@@ -354,12 +318,34 @@
 ;;   :bind (("M-i"     . change-inner)
 ;;          ("M-o M-o" . change-outer)))
 
-;; (use-package neotree
+;; (use-package smex
 ;;   :ensure t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Major mode based on extension
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TODO
+;; (use-package ivy-hydra
+;;   :ensure t)
+
+;; (use-package flycheck
+;;   :ensure t
+;;   :init
+;;   (global-flycheck-mode t))
+
+;; (use-package neotree
+;;   :ensure t
+;;   :bind (("<f2>" . neotree-toggle))
+;;   :init
+;;   (progn
+;;     ;; Every time when the neotree window is opened, it will try to find current
+;;     ;; file and jump to node.
+;;     (setq-default neo-smart-open t)
+;;     ;; Do not allow neotree to be the only open window
+;;     (setq-default neo-dont-be-alone t))
+;;   :config
+;;   (setq neo-theme 'nerd)) ; 'classic, 'nerd, 'ascii, 'arrow
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+					;    Major mode based on extension    ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; .ino files open in C
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
@@ -373,13 +359,6 @@
 
 ;; do not indent namespace text
 (c-set-offset 'innamespace 0)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Python Stuff
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(setq python-shell-interpreter "/usr/local/bin/ipython3"
-    python-shell-interpreter-args "--simple-prompt -i")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Functions
