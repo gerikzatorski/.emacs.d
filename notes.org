@@ -1,4 +1,22 @@
 #+TITLE:     Notes on personal emacs usage
 
+* Links
+
+  - https://joaotavora.github.io/yasnippet/snippet-development.html
+  - https://github.com/bbatsov/projectile
+  - http://cestlaz.github.io/posts/using-emacs-6-swiper/#.W4RCChhKi0p
+  - http://cestlaz.github.io/posts/using-emacs-2-org/#.W4RCChhKi0o
+  - http://www.modernemacs.com/post/outline-ivy/
+  - http://ehneilsen.net/notebook/orgExamples/org-examples.html
+
+
+* HOF
+  - [[https://jamiecollinson.com/blog/my-emacs-config/][my-emacs-config by Jamie Collinson]]
+  - [[https://github.com/cocreature/dotfiles/blob/master/emacs/.emacs.d/emacs.org]]
+  - https://github.com/waymondo/hemacs/blob/master/init.el
+  - https://github.com/dfrib/emacs_setup
+  - https://github.com/gbalats/dot-emacs/blob/master/init.el
+  
+
 * Find and replace text in multiple files
 

@@ -201,6 +201,8 @@
 
 ;; (set-frame-font "Consolas" nil t)
 
+(set-face-attribute 'default nil :height 150)
+
 (use-package ample-theme
   :ensure t
   :init (load-theme 'ample t))
@@ -322,8 +324,8 @@
 ;;   :ensure t)
 
 ;; TODO
-;; (use-package ivy-hydra
-;;   :ensure t)
+(use-package ivy-hydra
+  :ensure t)
 
 ;; (use-package flycheck
 ;;   :ensure t
@@ -352,6 +354,7 @@
 
 ;; .launch files open in xml
 (add-to-list 'auto-mode-alist '("\\.launch\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.test\\'" . xml-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C/C++ Stuff
