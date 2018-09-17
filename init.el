@@ -2,10 +2,25 @@
 
 ;; no splash screen
 (setq inhibit-startup-message t)
+
 ;; maximize screen quickly
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 ;; hide toolbar
 (tool-bar-mode -1)
+
+;; highlights paired parens
+(show-paren-mode 1)
+
+;; Changes all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq confirm-kill-emacs #'y-or-n-p)
+
+;; other
+(setq sentence-end-double-space nil)
+(setq show-trailing-whitespace t)
+(setq indicate-empty-lines t)
+(setq indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Setup
@@ -71,23 +86,6 @@
 ;; Custom configuration set by Emacs
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Misc
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; highlights paired parens
-(show-paren-mode 1)
-
-;; Changes all yes/no questions to y/n type
-(fset 'yes-or-no-p 'y-or-n-p)
-(setq confirm-kill-emacs #'y-or-n-p)
-
-;; other
-(setq sentence-end-double-space nil)
-(setq show-trailing-whitespace t)
-(setq indicate-empty-lines t)
-(setq indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auto Completion
@@ -191,6 +189,10 @@
   :ensure t
   :defer t)
 
+;; visualize color codes
+(use-package rainbow-mode
+  :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -215,10 +217,6 @@
  :config
  (beacon-mode 1)
  (setq beacon-color "#666600"))
-
-;; visualize color codes
-(use-package rainbow-mode
-  :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other Packages
