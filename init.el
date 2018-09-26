@@ -172,11 +172,11 @@
   ("C-c m l" . mc/insert-letters)
   ("C-c m a" . mc/mark-all-like-this))
 
-;; (use-package expand-region
-;;   :ensure t
-;;   :bind
-;;   ("C-=" . er/expand-region)
-;;   ("C--" . er/contract-region))
+(use-package expand-region
+  :ensure t
+  :bind
+  ("C-=" . er/expand-region)
+  ("C--" . er/contract-region))
 
 ;; NAVIGATION
 
