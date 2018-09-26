@@ -1,44 +1,69 @@
 ; -*- Mode: Emacs-Lisp -*-
 
+;; Turn off mouse interface early in startup to avoid momentary display
+;; (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;; (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+(package-initialize)
+
 ;; no splash screen
 (setq inhibit-startup-message t)
 
-;; maximize screen quickly
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; hide toolbar
-(tool-bar-mode -1)
+;;; mac cmd key binded to meta
+(setq mac-option-key-is-meta nil
+      mac-command-key-is-meta t
+      mac-command-modifier 'meta
+      mac-option-modifier 'none)
 
 ;; highlights paired parens
 (show-paren-mode 1)
+
+;; one space after periods
+(setq sentence-end-double-space nil)
+
+;; use spaces instead of tabs  when indenting
+(setq-default indent-tabs-mode nil)
 
 ;; Changes all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq confirm-kill-emacs #'y-or-n-p)
 
-;; other
-(setq sentence-end-double-space nil)
-(setq show-trailing-whitespace t)
-(setq indicate-empty-lines t)
-(setq indent-tabs-mode nil)
+;; Keep emacs Custom-settings in separate file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; General Setup
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; store all backup and autosave files in the tmp dir
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
-;; Install use-package if necessary
-;; https://github.com/jwiegley/use-package
-(require 'package)
-(setq package-enable-at-startup nil)
+;; Are we on a mac?
+(setq is-mac (equal system-type 'darwin))
 
-;; add repositories
+;; Setup environment variables from the user's shell.
+(when is-mac
+  (require-package 'exec-path-from-shell)
+  (exec-path-from-shell-initialize))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SOURCES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
-;; setup load-paths and autoloads for installed packages
-(package-initialize)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BOOTSTRAP USE-PACKAGE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Install use-package if necessary
+;; https://github.com/jwiegley/use-package
+(require 'package)
+(setq package-enable-at-startup nil)
 
 ;; Bootstrap 'use-package'
 (unless (package-installed-p 'use-package)
@@ -52,180 +77,9 @@
 ;; needed for use-package key bindings
 (require 'bind-key)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; System/Platform/OS Specific
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun osx-p ()
-  "Check if a system is running OSX."
-  (eq system-type 'darwin))
-(defun linux-p ()
-  "Check if a system is running Linux."
-  (eq system-type 'gnu/linux))
-(defun win-p ()
-  "Check if a system is running Windows."
-  (eq system-type 'gnu/windows-nt))
-
-;;; mac cmd key binded to meta
-(setq mac-option-key-is-meta nil
-      mac-command-key-is-meta t
-      mac-command-modifier 'meta
-      mac-option-modifier 'none)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Paths
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; store all backup and autosave files in the system's temp dir
-;; https://www.emacswiki.org/emacs/BackupDirectory
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
-
-;; Custom configuration set by Emacs
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Auto Completion
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package company
-  :ensure t
-  :diminish
-  :config
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-idle-delay t)
-
-  (use-package company-irony-c-headers
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-irony-c-headers))
-
-  (use-package company-irony
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-irony))
-
-  (use-package company-jedi
-    :ensure t
-    :init
-    (setq company-jedi-python-bin "python2")
-    :config
-    (add-to-list 'company-backends 'company-jedi))
-
-  (use-package company-web
-    :ensure t
-    :bind ("C-c w" . company-web-html)
-    :config
-    (add-to-list 'company-backends 'company-web-html))
-
-  (use-package company-statistics
-    :ensure t
-    :config
-    (add-hook 'after-init-hook 'company-statistics-mode)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Project Management
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-global-mode)
-  (setq projectile-enable-caching t)
-  (setq projectile-completion-system 'ivy))
-
-(use-package magit
-  :ensure t
-  :bind     (("C-x gs" . magit-status)
-             ("C-x gc" . magit-clone-url)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Modes
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package irony
-  :ensure t
-  :init
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode))
-  ;; :config
-  ;; ;; replace the `completion-at-point' and `complete-symbol' bindings in
-  ;; ;; irony-mode's buffers by irony-mode's function
-  ;; (defun my-irony-mode-hook ()
-  ;;   (define-key irony-mode-map [remap completion-at-point]
-  ;;     'irony-completion-at-point-async)
-  ;;   (define-key irony-mode-map [remap complete-symbol]
-  ;;     'irony-completion-at-point-async))
-  ;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  ;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
-(use-package markdown-mode
-  :ensure    t
-  :defer     t
-  :mode      ("\\.\\(markdown\\|mdown\\|md\\)$" . markdown-mode))
-
-(use-package groovy-mode
-  :ensure t
-  :config
-  (defun my-groovy-mode-hook ()
-    ;; Indent groovy code four spaces instead of two
-    (setq c-basic-offset 4))
-  (add-hook 'groovy-mode-hook #'my-groovy-mode-hook)
-  :mode
-  (("Jenkinsfile\\'" . groovy-mode)))
-
-(use-package cmake-mode
-  :ensure t
-  :mode "CMakeLists.txt")
-
-(use-package csharp-mode
-  :ensure t)
-
-(use-package dockerfile-mode
-  :ensure t
-  :defer t)
-
-;; visualize color codes
-(use-package rainbow-mode
-  :ensure t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; GUI
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; set a default font
-;; (when (member "Consolas" (font-family-list))
-;;   (set-face-attribute 'default nil :font "Consolas"))
-
-;; (set-frame-font "Consolas" nil t)
-
-(set-face-attribute 'default nil :height 150)
-
-(use-package ample-theme
-  :ensure t
-  :init (load-theme 'ample t))
-
-(use-package apropospriate-theme
-  :ensure t)
-
-(use-package beacon
- :ensure t
- :config
- (beacon-mode 1)
- (setq beacon-color "#666600"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Other Packages
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package exec-path-from-shell
-  :ensure t
-  :config (when (memq window-system '(mac ns))
-	    (exec-path-from-shell-initialize)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; PACKAGES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package yasnippet
   :ensure t
@@ -263,13 +117,52 @@
   :config
   (counsel-projectile-mode 1))
 
-(use-package avy
+(use-package company
   :ensure t
-  :pin melpa-stable
-  :bind
-  ("C-;" . avy-goto-char-2)
+  :diminish
   :config
-  (setq avy-background t))
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-idle-delay t)
+
+  (use-package company-irony-c-headers
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-irony-c-headers))
+
+  (use-package company-irony
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-irony))
+
+  (use-package company-jedi
+    :ensure t
+    :init
+    (setq company-jedi-python-bin "python2")
+    :config
+    (add-to-list 'company-backends 'company-jedi))
+
+  (use-package company-web
+    :ensure t
+    :bind ("C-c w" . company-web-html)
+    :config
+    (add-to-list 'company-backends 'company-web-html))
+
+  (use-package company-statistics
+    :ensure t
+    :config
+    (add-hook 'after-init-hook 'company-statistics-mode)))
+
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode)
+  (setq projectile-enable-caching t)
+  (setq projectile-completion-system 'ivy))
+
+(use-package magit
+  :ensure t
+  :bind     (("C-x gs" . magit-status)
+             ("C-x gc" . magit-clone-url)))
 
 (use-package multiple-cursors
   :ensure t
@@ -279,42 +172,74 @@
   ("C-c m l" . mc/insert-letters)
   ("C-c m a" . mc/mark-all-like-this))
 
-(use-package ace-window
-  :ensure t
-  :bind ("M-p" . ace-window)
-  :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-
 ;; (use-package expand-region
 ;;   :ensure t
 ;;   :bind
 ;;   ("C-=" . er/expand-region)
 ;;   ("C--" . er/contract-region))
 
-;; (use-package google-this
-;;   :ensure t
-;;   :diminish
-;;   :config
-;;   (google-this-mode 1))
+;; NAVIGATION
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-					;            Org Mode Stuff           ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package ace-window
+  :ensure t
+  :bind ("M-p" . ace-window)
+  :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
-;; (setq org-startup-folded nil)
+(use-package avy
+  :ensure t
+  :pin melpa-stable
+  :bind
+  ("C-;" . avy-goto-char-2)
+  :config
+  (setq avy-background t))
 
-(use-package org-bullets
-    :ensure t
-    :config
-    (setq org-bullets-bullet-list '("∙"))
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; Modes
 
-(org-babel-do-load-languages
-      'org-babel-load-languages
-      '((C . t)))
+(use-package irony
+  :ensure t
+  :init
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-					;             Test Packges            ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package markdown-mode
+  :ensure    t
+  :defer     t
+  :mode      ("\\.\\(markdown\\|mdown\\|md\\)$" . markdown-mode))
+
+(use-package groovy-mode
+  :ensure t
+  :config
+  ;; Indent groovy code four spaces instead of two
+  (defun my-groovy-mode-hook ()
+    (setq c-basic-offset 4))
+  (add-hook 'groovy-mode-hook #'my-groovy-mode-hook)
+  :mode
+  (("Jenkinsfile\\'" . groovy-mode)))
+
+(use-package cmake-mode
+  :ensure t
+  :mode "CMakeLists.txt")
+
+;; GUI Stuff
+
+(use-package ample-theme
+  :ensure t
+  :init (load-theme 'ample t))
+
+(use-package apropospriate-theme
+  :ensure t)
+
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1)
+  (setq beacon-color "#666600"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; FUTURE PACKAGES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; manually installed packages
 ;; (add-to-list 'load-path "~/.emacs.d/packages/change-inner/")
@@ -326,8 +251,8 @@
 ;;   :ensure t)
 
 ;; TODO
-(use-package ivy-hydra
-  :ensure t)
+;; (use-package ivy-hydra
+;;   :ensure t)
 
 ;; (use-package flycheck
 ;;   :ensure t
@@ -347,9 +272,15 @@
 ;;   :config
 ;;   (setq neo-theme 'nerd)) ; 'classic, 'nerd, 'ascii, 'arrow
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-					;    Major mode based on extension    ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (use-package org-bullets
+;;     :ensure t
+;;     :config
+;;     (setq org-bullets-bullet-list '("∙"))
+;;     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Miscellaneous
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; .ino files open in C
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
@@ -358,16 +289,16 @@
 (add-to-list 'auto-mode-alist '("\\.launch\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.test\\'" . xml-mode))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; C/C++ Stuff
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(org-babel-do-load-languages
+      'org-babel-load-languages
+      '((C . t)))
 
-;; do not indent namespace text
-(c-set-offset 'innamespace 0)
+;; resize frame font
+(set-face-attribute 'default (selected-frame) :height 160)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Comment Line
 ;; http://stackoverflow.com/a/9697222/3105650
