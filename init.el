@@ -240,13 +240,6 @@
 ;; FUTURE PACKAGES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;; manually installed packages
-;; (add-to-list 'load-path "~/.emacs.d/packages/change-inner/")
-;; (use-package change-inner
-;;   :bind (("M-i"     . change-inner)
-;;          ("M-o M-o" . change-outer)))
-
 ;; (use-package smex
 ;;   :ensure t)
 
