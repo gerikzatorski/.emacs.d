@@ -1,3 +1,0 @@
-[submodule "packages/change-inner"]
-	path = packages/change-inner
-	url = git@github.com:magnars/change-inner.el.git
