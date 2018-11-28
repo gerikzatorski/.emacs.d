@@ -1,28 +1,24 @@
 ; -*- Mode: Emacs-Lisp -*-
 
-;; Turn off mouse interface early in startup to avoid momentary display
-;; (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-;; (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+;; First things first...
 
-(package-initialize)
-
-;; no splash screen
 (setq inhibit-startup-message t)
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;;; mac cmd key binded to meta
+;; Mac stuff...
+
+(setq is-mac (equal system-type 'darwin))
 (setq mac-option-key-is-meta nil
       mac-command-key-is-meta t
       mac-command-modifier 'meta
       mac-option-modifier 'none)
 
-;; highlights paired parens
-(show-paren-mode 1)
+;; Emacs stuff...
 
-;; one space after periods
+(show-paren-mode 1)                     
 (setq sentence-end-double-space nil)
-
-;; use spaces instead of tabs  when indenting
 (setq-default indent-tabs-mode nil)
 
 ;; Changes all yes/no questions to y/n type
@@ -34,26 +30,21 @@
 (load custom-file 'noerror)
 
 ;; store all backup and autosave files in the tmp dir
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-;; Are we on a mac?
-(setq is-mac (equal system-type 'darwin))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; SOURCES
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+;; resize frame font
+;; (set-face-attribute 'default (selected-frame) :height 160)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BOOTSTRAP USE-PACKAGE
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(package-initialize)
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
 ;; Install use-package if necessary
 ;; https://github.com/jwiegley/use-package
@@ -278,19 +269,9 @@
 ;; Miscellaneous
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; .ino files open in C
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
-
-;; .launch files open in xml
 (add-to-list 'auto-mode-alist '("\\.launch\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.test\\'" . xml-mode))
-
-(org-babel-do-load-languages
-      'org-babel-load-languages
-      '((C . t)))
-
-;; resize frame font
-(set-face-attribute 'default (selected-frame) :height 160)
 
 ;; Functions (load all files in defuns-dir)
 (setq defuns-dir (expand-file-name "defuns" user-emacs-directory))

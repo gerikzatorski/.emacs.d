@@ -5,3 +5,10 @@
 - M-x irony-install-server (did apt-get clang take care of this?)
 - M-x jedi:install-server
 
+
+* Buffer Navigation
+
+* File Navigation
+
+
+
