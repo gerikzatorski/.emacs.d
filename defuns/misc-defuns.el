@@ -1,4 +1,3 @@
-
 ;; Comment Line
 ;; http://stackoverflow.com/a/9697222/3105650
 (defun comment-or-uncomment-region-or-line ()
@@ -81,6 +80,6 @@
 (defun find-user-init-file ()
   "Edit the `user-init-file', in another window."
   (interactive)
-  (find-file-other-window user-init-file))
+  (find-file user-init-file))
 (global-set-key (kbd "C-c I") 'find-user-init-file)
 
