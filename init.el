@@ -2,7 +2,6 @@
 
 ;; First things first
 (setq inhibit-startup-message t)
-(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
@@ -26,6 +25,10 @@
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
+;; Changes all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq confirm-kill-emacs #'y-or-n-p)
+
 ;; Install use-package if necessary
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -36,7 +39,9 @@
   (require 'use-package))
 (require 'bind-key)
 
-;; Packages...
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package magit
   :ensure t
@@ -49,21 +54,35 @@
   :diminish
   :config
   (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t  ; add recent files and bookmarks to the ivy-switch-buffer
-        ivy-count-format "%d/%d ") ; ivy prompt formatting
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "%d/%d ")
   :bind
   ("C-c C-r" . ivy-resume))
 
 (use-package swiper
   :ensure t
   :bind
-  ("C-s" . swiper)  ; remapping isearch-forward
-  ("C-r" . swiper)) ; remapping isearch-backward
+  ("C-s" . swiper)
+  ("C-r" . swiper))
 
 (use-package counsel
   :ensure t
   :bind
-  ("M-x" . counsel-M-x)) ; remapping M-x
+  ("M-x" . counsel-M-x))
+
+(use-package projectile
+  :ensure t
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :config
+  (projectile-global-mode)
+  (setq projectile-enable-caching t)
+  (setq projectile-completion-system 'ivy))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-mode 1))
 
 (use-package multiple-cursors
   :ensure t
@@ -78,6 +97,19 @@
   :bind
   ("C-=" . er/expand-region)
   ("C--" . er/contract-region))
+
+(use-package ample-theme
+  :ensure t
+  :init (load-theme 'ample t))
+
+(use-package apropospriate-theme
+  :ensure t)
+
+;; Modes
+
+(use-package cmake-mode
+  :ensure t
+  :mode "CMakeLists.txt")
 
 ;; Functions (load all files in defuns-dir)
 (setq defuns-dir (expand-file-name "defuns" user-emacs-directory))
