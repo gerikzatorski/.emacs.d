@@ -29,6 +29,9 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq confirm-kill-emacs #'y-or-n-p)
 
+;; Global Key Bindings
+(global-set-key [f5]   (lambda nil (interactive) (revert-buffer nil t t) (message (concat "Reverted buffer " (buffer-name)))))
+
 ;; Install use-package if necessary
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -70,12 +73,28 @@
   :bind
   ("M-x" . counsel-M-x))
 
+(use-package avy
+  :ensure t
+  :bind
+  ("s-." . avy-goto-word-or-subword-1)
+  ("s-," . avy-goto-char)
+  :config
+  (setq avy-background t))
+
+(use-package ace-window
+  :ensure t
+  :bind* ("M-o" . ace-window)
+  :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
 (use-package projectile
   :ensure t
+  :pin melpa-stable
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :config
-  (projectile-global-mode)
+  ;; (projectile-global-mode)
+  ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1)
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'ivy))
 
@@ -107,9 +126,29 @@
 
 ;; Modes
 
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yml$" . yaml-mode))
+
 (use-package cmake-mode
   :ensure t
+  :defer t
   :mode "CMakeLists.txt")
+
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :mode ("\\.\\(markdown\\|mdown\\|md\\)$" . markdown-mode))
+
+(use-package groovy-mode
+  :ensure t
+  :defer t
+  :config
+  ;; Indent groovy code four spaces instead of two
+  (defun my-groovy-mode-hook ()
+    (setq c-basic-offset 4))
+  (add-hook 'groovy-mode-hook #'my-groovy-mode-hook)
+  :mode ("Jenkinsfile\\'" . groovy-mode))
 
 ;; Functions (load all files in defuns-dir)
 (setq defuns-dir (expand-file-name "defuns" user-emacs-directory))
