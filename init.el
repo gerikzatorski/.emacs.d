@@ -46,6 +46,13 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Use rtags for navigation
+(use-package rtags
+  :commands rtags-start-process-unless-running
+  :config (progn
+	    (message "Rtags loaded")
+	    (use-package company-rtags)))
+
 (use-package magit
   :ensure t
   :bind
@@ -117,9 +124,18 @@
   ("C-=" . er/expand-region)
   ("C--" . er/contract-region))
 
+;; Themes
+
+(use-package naquadah-theme
+  :init (load-theme 'naquadah t)
+  :ensure t)
+
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t)
+
+
 (use-package ample-theme
-  :ensure t
-  :init (load-theme 'ample t))
+  :ensure t)
 
 (use-package apropospriate-theme
   :ensure t)
