@@ -2,13 +2,17 @@
 
 * Ubuntu Requirements
 
+libclang-dev
+
 - M-x irony-install-server (did apt-get clang take care of this?)
 - M-x jedi:install-server
 
+* Tips
 
-* Buffer Navigation
+** Jumping Around
 
-* File Navigation
+** Navigation
+
 
 
 

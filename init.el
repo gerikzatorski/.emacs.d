@@ -48,10 +48,10 @@
 
 ;; Use rtags for navigation
 (use-package rtags
-  :commands rtags-start-process-unless-running
-  :config (progn
-	    (message "Rtags loaded")
-	    (use-package company-rtags)))
+  :ensure t
+  :hook
+  (c-mode-common-hook . rtags-start-process-unless-running)
+  (c++-mode-common-hook . rtags-start-process-unless-running))
 
 (use-package magit
   :ensure t
@@ -127,17 +127,21 @@
 ;; Themes
 
 (use-package naquadah-theme
-  :init (load-theme 'naquadah t)
+  ;; :init (load-theme 'naquadah t)
+  :defer t
   :ensure t)
 
 (use-package color-theme-sanityinc-tomorrow
+  :init (load-theme 'sanityinc-tomorrow-eighties)
+  ;; :defer t
   :ensure t)
 
-
 (use-package ample-theme
+  :defer t
   :ensure t)
 
 (use-package apropospriate-theme
+  :defer t
   :ensure t)
 
 ;; Modes
