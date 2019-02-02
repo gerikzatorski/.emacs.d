@@ -78,7 +78,10 @@
 (use-package counsel
   :ensure t
   :bind
-  ("M-x" . counsel-M-x))
+  ("M-x" . counsel-M-x)
+  ("C-x C-f" . counsel-find-file)
+  ("M-i" . counsel-imenu)
+  ("M-y" . counsel-yank-pop))
 
 (use-package avy
   :ensure t
