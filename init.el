@@ -46,6 +46,13 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package exec-path-from-shell
+  :ensure t
+  :if (memq window-system '(mac ns))
+  :config
+  (x-focus-frame nil)
+  (exec-path-from-shell-initialize))
+
 ;; Use rtags for navigation
 (use-package rtags
   :ensure t
