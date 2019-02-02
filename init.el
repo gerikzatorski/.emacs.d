@@ -46,6 +46,20 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package company
+  :ensure t
+  :diminish ""
+  :config
+  (global-company-mode)
+  :custom
+  (company-idle-delay 1.0)
+  (company-selection-wrap-around t)
+  (company-minimum-prefix-length 2)
+  (company-require-match nil)
+  (company-dabbrev-ignore-case nil)
+  (company-dabbrev-downcase nil)
+  (company-show-numbers t))
+  
 (use-package exec-path-from-shell
   :ensure t
   :if (memq window-system '(mac ns))
