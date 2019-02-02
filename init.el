@@ -150,7 +150,7 @@
 
 (use-package yaml-mode
   :ensure t
-  :mode ("\\.yml$" . yaml-mode))
+  :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
 
 (use-package cmake-mode
   :ensure t
