@@ -102,16 +102,15 @@
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :config
-  ;; (projectile-global-mode)
-  ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1)
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'ivy))
 
 (use-package counsel-projectile
   :ensure t
+  :after projectile
   :config
-  (counsel-projectile-mode 1))
+  (counsel-projectile-mode))
 
 (use-package multiple-cursors
   :ensure t
