@@ -46,6 +46,25 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package neotree
+  :ensure t
+  :config
+  (setq-default neo-smart-open t)
+  (setq-default neo-dont-be-alone t))
+
+(use-package ag
+  :ensure t
+  :config
+  (add-to-list 'ag-arguments "--word-regexp")
+  :custom
+  (ag-highlight-search t)
+  (ag-reuse-buffers t))
+
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
+
 (use-package company
   :ensure t
   :diminish ""
