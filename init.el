@@ -139,8 +139,8 @@
 (use-package avy
   :ensure t
   :bind
-  ("s-." . avy-goto-word-or-subword-1)
-  ("s-," . avy-goto-char)
+  ("C-:" . avy-goto-char)
+  ("C-'" . avy-goto-word-or-subword-1)
   :config
   (setq avy-background t))
 
