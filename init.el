@@ -77,8 +77,8 @@
 (use-package magit
   :ensure t
   :bind
-  ("C-x gs" . magit-status)
-  ("C-x gc" . magit-clone-url))
+  ("C-c m s" . magit-status)
+  ("C-c m u" . magit-clone-url))
 
 (use-package ivy
   :ensure t
