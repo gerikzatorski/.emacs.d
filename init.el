@@ -30,7 +30,9 @@
 (setq confirm-kill-emacs #'y-or-n-p)
 
 ;; Global Key Bindings
-(global-set-key [f5]   (lambda nil (interactive) (revert-buffer nil t t) (message (concat "Reverted buffer " (buffer-name)))))
+(global-set-key [f2] (lambda nil (interactive) (revert-buffer nil t t) (message (concat "Reverted buffer " (buffer-name)))))
+(global-set-key [f5] 'compile)
+(global-set-key [f8] 'neotree-toggle)
 
 ;; Install use-package if necessary
 (require 'package)
