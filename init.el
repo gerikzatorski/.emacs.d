@@ -49,6 +49,16 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :config (yas-global-mode))
+
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet
+  :config (yasnippet-snippets-initialize))
+
 (use-package neotree
   :ensure t
   :config
