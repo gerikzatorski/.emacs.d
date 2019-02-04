@@ -49,6 +49,11 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1))
+
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
