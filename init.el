@@ -57,7 +57,9 @@
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
-  :config (yas-global-mode))
+  :config
+  (yas-global-mode)
+  (setq yas-snippet-dirs "~/.emacs.d/snippets"))
 
 (use-package yasnippet-snippets
   :ensure t
@@ -96,7 +98,7 @@
   (company-dabbrev-ignore-case nil)
   (company-dabbrev-downcase nil)
   (company-show-numbers t))
-  
+
 (use-package exec-path-from-shell
   :ensure t
   :if (memq window-system '(mac ns))
