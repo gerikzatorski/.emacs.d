@@ -16,6 +16,7 @@
 (show-paren-mode 1)
 (setq-default indent-tabs-mode nil)
 (setq sentence-end-double-space nil)
+(setq visible-bell 1)
 
 ;; Keep emacs Custom-settings in separate file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -30,7 +31,9 @@
 (setq confirm-kill-emacs #'y-or-n-p)
 
 ;; Global Key Bindings
-(global-set-key [f5]   (lambda nil (interactive) (revert-buffer nil t t) (message (concat "Reverted buffer " (buffer-name)))))
+(global-set-key [f2] (lambda nil (interactive) (revert-buffer nil t t) (message (concat "Reverted buffer " (buffer-name)))))
+(global-set-key [f5] 'compile)
+(global-set-key [f8] 'neotree-toggle)
 
 ;; Install use-package if necessary
 (require 'package)
@@ -46,6 +49,74 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker)
+  :diminish
+  :init
+  (use-package docker-image     :commands docker-images)
+  (use-package docker-container :commands docker-containers)
+  (use-package docker-volume    :commands docker-volumes)
+  (use-package docker-network   :commands docker-containers)
+  (use-package docker-machine   :commands docker-machines))
+
+(use-package docker-compose-mode
+  :ensure t
+  :mode "docker-compose.*\.yml\\'")
+
+(use-package dockerfile-mode
+  :ensure t
+  :mode "Dockerfile[a-zA-Z.-]*\\'")
+
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1))
+
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :bind (("C-c y d" . yas-load-directory)
+         ("C-c y i" . yas-insert-snippet)
+         ("C-c y f" . yas-visit-snippet-file)
+         ("C-c y n" . yas-new-snippet)
+         ("C-c y t" . yas-tryout-snippet)
+         ("C-c y l" . yas-describe-tables)
+         ("C-c y g" . yas/global-mode)
+         ("C-c y m" . yas/minor-mode)
+         ("C-c y r" . yas-reload-all)
+         ("C-c y x" . yas-expand))
+  :bind (:map yas-keymap
+              ("C-i" . yas-next-field-or-maybe-expand))
+  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
+  :config
+  (yas-load-directory "~/.emacs.d/snippets")
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet
+  :config (yasnippet-snippets-initialize))
+
+(use-package neotree
+  :ensure t
+  :config
+  (setq-default neo-smart-open t)
+  (setq-default neo-dont-be-alone t))
+
+(use-package ag
+  :ensure t
+  :config
+  (add-to-list 'ag-arguments "--word-regexp")
+  :custom
+  (ag-highlight-search t)
+  (ag-reuse-buffers t))
+
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
+
 (use-package company
   :ensure t
   :diminish ""
@@ -59,7 +130,7 @@
   (company-dabbrev-ignore-case nil)
   (company-dabbrev-downcase nil)
   (company-show-numbers t))
-  
+
 (use-package exec-path-from-shell
   :ensure t
   :if (memq window-system '(mac ns))
@@ -77,8 +148,8 @@
 (use-package magit
   :ensure t
   :bind
-  ("C-x gs" . magit-status)
-  ("C-x gc" . magit-clone-url))
+  ("C-c m s" . magit-status)
+  ("C-c m u" . magit-clone-url))
 
 (use-package ivy
   :ensure t
@@ -107,8 +178,8 @@
 (use-package avy
   :ensure t
   :bind
-  ("s-." . avy-goto-word-or-subword-1)
-  ("s-," . avy-goto-char)
+  ("C-:" . avy-goto-char)
+  ("C-'" . avy-goto-word-or-subword-1)
   :config
   (setq avy-background t))
 
