@@ -245,6 +245,9 @@
   :ensure t
   :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
 
+(use-package nxml-mode
+  :mode ("\\.\\(xml\\|launch\\)$" . nxml-mode))
+
 (use-package cmake-mode
   :ensure t
   :defer t
