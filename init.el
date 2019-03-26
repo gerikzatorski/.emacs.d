@@ -43,6 +43,7 @@
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
+(require 'diminish)
 (require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -153,7 +154,7 @@
 
 (use-package ivy
   :ensure t
-  :diminish ""
+  :diminish 'ivy-mode
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t
@@ -243,6 +244,9 @@
 (use-package yaml-mode
   :ensure t
   :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
+
+(use-package nxml-mode
+  :mode ("\\.\\(xml\\|launch\\)$" . nxml-mode))
 
 (use-package cmake-mode
   :ensure t
