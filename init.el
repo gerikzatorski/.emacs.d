@@ -50,6 +50,15 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package ansi-color
+  :ensure t
+  ;; :after (ansi-term compile)
+  :config
+  (defun my/ansi-colorize-buffer ()
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
+
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker)
