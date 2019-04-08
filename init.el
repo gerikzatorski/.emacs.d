@@ -17,6 +17,7 @@
 (setq-default indent-tabs-mode nil)
 (setq sentence-end-double-space nil)
 (setq visible-bell 1)
+(delete-selection-mode 1)
 
 ;; Keep emacs Custom-settings in separate file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
