@@ -59,7 +59,7 @@
     ) ; end-of-let
   ;; put the point in the lowest line and return
   (next-line arg))
-(global-set-key (kbd "C-c d") 'duplicate-line)
+(global-set-key (kbd "C-c c") 'duplicate-line)
 
 ;; Delete File and Buffer
 (defun delete-file-and-buffer ()

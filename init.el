@@ -17,6 +17,7 @@
 (setq-default indent-tabs-mode nil)
 (setq sentence-end-double-space nil)
 (setq visible-bell 1)
+(delete-selection-mode 1)
 
 ;; Keep emacs Custom-settings in separate file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -49,6 +50,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package ansi-color
+  :ensure t
+  ;; :after (ansi-term compile)
+  :config
+  (defun my/ansi-colorize-buffer ()
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
 
 (use-package docker
   :ensure t
@@ -179,7 +189,7 @@
 (use-package avy
   :ensure t
   :bind
-  ("C-:" . avy-goto-char)
+  ("C-;" . avy-goto-char)
   ("C-'" . avy-goto-word-or-subword-1)
   :config
   (setq avy-background t))
