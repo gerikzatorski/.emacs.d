@@ -51,6 +51,9 @@
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package arduino-mode
+  :ensure t)
+
 (use-package ansi-color
   :ensure t
   ;; :after (ansi-term compile)
