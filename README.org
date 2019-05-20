@@ -4,7 +4,7 @@
 
 libclang-dev
 
-- M-x irony-install-server (did apt-get clang take care of this?)
+- M-x irony-install-server
 - M-x jedi:install-server
 
 * Tips

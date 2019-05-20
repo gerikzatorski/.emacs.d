@@ -131,19 +131,26 @@
   :config
   (powerline-default-theme))
 
+
 (use-package company
   :ensure t
   :diminish ""
   :config
-  (global-company-mode)
-  :custom
-  (company-idle-delay 1.0)
-  (company-selection-wrap-around t)
-  (company-minimum-prefix-length 2)
-  (company-require-match nil)
-  (company-dabbrev-ignore-case nil)
-  (company-dabbrev-downcase nil)
-  (company-show-numbers t))
+  (global-company-mode t)
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3))
+
+(use-package company-irony
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-irony))
+
+(use-package irony
+  :ensure t
+  :config
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
 (use-package exec-path-from-shell
   :ensure t
