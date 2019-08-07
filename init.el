@@ -63,21 +63,6 @@
       (ansi-color-apply-on-region (point-min) (point-max))))
   (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
 
-(use-package docker
-  :ensure t
-  :bind ("C-c d" . docker)
-  :diminish
-  :init
-  (use-package docker-image     :commands docker-images)
-  (use-package docker-container :commands docker-containers)
-  (use-package docker-volume    :commands docker-volumes)
-  (use-package docker-network   :commands docker-containers)
-  (use-package docker-machine   :commands docker-machines))
-
-(use-package docker-compose-mode
-  :ensure t
-  :mode "docker-compose.*\.yml\\'")
-
 (use-package dockerfile-mode
   :ensure t
   :mode "Dockerfile[a-zA-Z.-]*\\'")
