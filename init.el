@@ -36,6 +36,9 @@
 (global-set-key [f5] 'compile)
 (global-set-key [f8] 'neotree-toggle)
 
+;; Font Settings
+(set-face-attribute 'default nil :height 150)
+
 ;; Install use-package if necessary
 (require 'package)
 (setq package-enable-at-startup nil)
