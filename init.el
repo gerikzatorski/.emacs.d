@@ -18,7 +18,6 @@
 (setq sentence-end-double-space nil)
 (setq visible-bell 1)
 (delete-selection-mode 1)
-(setq next-line-add-newlines t)
 
 ;; Keep emacs Custom-settings in separate file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -54,9 +53,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package arduino-mode
-  :ensure t)
 
 (use-package ansi-color
   :ensure t
