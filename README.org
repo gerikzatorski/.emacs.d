@@ -2,17 +2,7 @@
 
 * Ubuntu Requirements
 
-libclang-dev
+sudo apt install libclang-dev ctags
 
 - M-x irony-install-server
 - M-x jedi:install-server
-
-* Tips
-
-** Jumping Around
-
-** Navigation
-
-
-
-
