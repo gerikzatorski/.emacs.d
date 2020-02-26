@@ -129,13 +129,6 @@
   (x-focus-frame nil)
   (exec-path-from-shell-initialize))
 
-;; Use rtags for navigation
-(use-package rtags
-  :ensure t
-  :hook
-  (c-mode-common-hook . rtags-start-process-unless-running)
-  (c++-mode-common-hook . rtags-start-process-unless-running))
-
 (use-package magit
   :ensure t
   :bind
