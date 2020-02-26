@@ -130,6 +130,11 @@
   (add-hook 'python-mode-hook 'jedi:setup)
   (add-to-list 'company-backends 'company-jedi))
 
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+
 (use-package exec-path-from-shell
   :ensure t
   :if (memq window-system '(mac ns))

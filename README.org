@@ -2,7 +2,12 @@
 
 * Ubuntu Requirements
 
-sudo apt install libclang-dev ctags
+#+BEGIN_SRC sh
+sudo apt install libclang-dev \ # company-irony
+                  ctags         # counsel-etags
+
+sudo pip install pylint # flycheck
+#+END_SRC
 
 - M-x irony-install-server
 - M-x jedi:install-server
