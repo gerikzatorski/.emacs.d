@@ -7,7 +7,8 @@
 
 ;; Gotta do this early
 (package-initialize)
-(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+;; marmalade signature issue
+;; (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
@@ -39,6 +40,10 @@
 ;; Font Settings
 (set-face-attribute 'default nil :height 150)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package Management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Install use-package if necessary
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -48,10 +53,6 @@
 (eval-when-compile
   (require 'use-package))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Packages
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (use-package ansi-color
   :ensure t
   ;; :after (ansi-term compile)
@@ -60,10 +61,6 @@
     (let ((buffer-read-only nil))
       (ansi-color-apply-on-region (point-min) (point-max))))
   (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
-
-(use-package dockerfile-mode
-  :ensure t
-  :mode "Dockerfile[a-zA-Z.-]*\\'")
 
 (use-package beacon
   :ensure t
@@ -264,6 +261,10 @@
   :defer t
   :mode ("\\.\\(markdown\\|mdown\\|md\\)$" . markdown-mode))
 
+(use-package dockerfile-mode
+  :ensure t
+  :mode "Dockerfile[a-zA-Z.-]*\\'")
+
 (use-package groovy-mode
   :ensure t
   :defer t
@@ -274,7 +275,11 @@
   (add-hook 'groovy-mode-hook #'my-groovy-mode-hook)
   :mode ("Jenkinsfile\\'" . groovy-mode))
 
-;; Functions (load all files in defuns-dir)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; load all files in defuns-dir
 (setq defuns-dir (expand-file-name "defuns" user-emacs-directory))
 (dolist (file (directory-files defuns-dir t "\\w+"))
   (when (file-regular-p file)
