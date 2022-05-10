@@ -53,8 +53,10 @@
 (eval-when-compile
   (require 'use-package))
 
+;; ensure use-package installs packages
+(setq use-package-always-ensure t)
+
 (use-package ansi-color
-  :ensure t
   ;; :after (ansi-term compile)
   :config
   (defun my/ansi-colorize-buffer ()
@@ -63,28 +65,23 @@
   (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
 
 (use-package beacon
-  :ensure t
   :config
   (beacon-mode 1))
 
 (use-package yasnippet
-  :ensure t
   :init
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets
-  :ensure t
   :after yasnippet
   :config (yasnippet-snippets-initialize))
 
 (use-package neotree
-  :ensure t
   :config
   (setq-default neo-smart-open t)
   (setq-default neo-dont-be-alone t))
 
 (use-package ag
-  :ensure t
   :config
   (add-to-list 'ag-arguments "--word-regexp")
   :custom
@@ -92,13 +89,10 @@
   (ag-reuse-buffers t))
 
 (use-package powerline
-  :ensure t
   :config
   (powerline-default-theme))
 
-
 (use-package company
-  :ensure t
   :diminish ""
   :config
   (global-company-mode t)
@@ -106,45 +100,38 @@
   (setq company-minimum-prefix-length 2))
 
 (use-package company-irony
-  :ensure t
   :after company
   :config
   (add-to-list 'company-backends 'company-irony))
 
 (use-package irony
-  :ensure t
   :config
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
 (use-package company-jedi
-  :ensure t
   :after company
   :config
   (add-hook 'python-mode-hook 'jedi:setup)
   (add-to-list 'company-backends 'company-jedi))
 
 (use-package flycheck
-  :ensure t
   :init
   (global-flycheck-mode t))
 
 (use-package exec-path-from-shell
-  :ensure t
   :if (memq window-system '(mac ns))
   :config
   (x-focus-frame nil)
   (exec-path-from-shell-initialize))
 
 (use-package magit
-  :ensure t
   :bind
   ("C-c m s" . magit-status)
   ("C-c m u" . magit-clone-url))
 
 (use-package ivy
-  :ensure t
   :diminish 'ivy-mode
   :config
   (ivy-mode 1)
@@ -154,13 +141,11 @@
   ("C-c C-r" . ivy-resume))
 
 (use-package swiper
-  :ensure t
   :bind
   ("C-s" . swiper)
   ("C-r" . swiper))
 
 (use-package counsel
-  :ensure t
   :bind
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file)
@@ -168,7 +153,6 @@
   ("M-y" . counsel-yank-pop))
 
 (use-package counsel-etags
-  :ensure t
   :bind (("C-]" . counsel-etags-find-tag-at-point))
   :init
   (add-hook 'prog-mode-hook
@@ -180,7 +164,6 @@
   (push "build" counsel-etags-ignore-directories))
 
 (use-package avy
-  :ensure t
   :bind
   ("C-;" . avy-goto-char)
   ("C-'" . avy-goto-word-or-subword-1)
@@ -188,12 +171,10 @@
   (setq avy-background t))
 
 (use-package ace-window
-  :ensure t
   :bind* ("M-o" . ace-window)
   :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 (use-package projectile
-  :ensure t
   :pin melpa-stable
   :bind-keymap
   ("C-c p" . projectile-command-map)
@@ -203,13 +184,11 @@
   (setq projectile-completion-system 'ivy))
 
 (use-package counsel-projectile
-  :ensure t
   :after projectile
   :config
   (counsel-projectile-mode))
 
 (use-package multiple-cursors
-  :ensure t
   :bind
   ("C-c m c" . mc/edit-lines)
   ("C-c m n" . mc/insert-numbers)
@@ -217,7 +196,6 @@
   ("C-c m a" . mc/mark-all-like-this))
 
 (use-package expand-region
-  :ensure t
   :bind
   ("C-=" . er/expand-region)
   ("C--" . er/contract-region))
@@ -225,48 +203,38 @@
 ;; Themes
 
 (use-package naquadah-theme
-  ;; :init (load-theme 'naquadah t)
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package color-theme-sanityinc-tomorrow
-  :init (load-theme 'sanityinc-tomorrow-eighties)
-  ;; :defer t
-  :ensure t)
+  :init (load-theme 'sanityinc-tomorrow-eighties))
+  ;; :defer t)
 
 (use-package ample-theme
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package apropospriate-theme
-  :defer t
-  :ensure t)
+  :defer t)
 
 ;; Modes
 
 (use-package yaml-mode
-  :ensure t
   :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
 
 (use-package nxml-mode
   :mode ("\\.\\(xml\\|launch\\)$" . nxml-mode))
 
 (use-package cmake-mode
-  :ensure t
   :defer t
   :mode "CMakeLists.txt")
 
 (use-package markdown-mode
-  :ensure t
   :defer t
   :mode ("\\.\\(markdown\\|mdown\\|md\\)$" . markdown-mode))
 
 (use-package dockerfile-mode
-  :ensure t
   :mode "Dockerfile[a-zA-Z.-]*\\'")
 
 (use-package groovy-mode
-  :ensure t
   :defer t
   :config
   ;; Indent groovy code four spaces instead of two
