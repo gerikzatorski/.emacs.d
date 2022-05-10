@@ -35,7 +35,6 @@
 ;; Global Key Bindings
 (global-set-key [f2] (lambda nil (interactive) (revert-buffer nil t t) (message (concat "Reverted buffer " (buffer-name)))))
 (global-set-key [f5] 'compile)
-(global-set-key [f8] 'neotree-toggle)
 
 ;; Font Settings
 (set-face-attribute 'default nil :height 150)
@@ -77,6 +76,8 @@
   :config (yasnippet-snippets-initialize))
 
 (use-package neotree
+  :bind
+  ("<f8>" . neotree-toggle)
   :config
   (setq-default neo-smart-open t)
   (setq-default neo-dont-be-alone t))
@@ -115,10 +116,6 @@
   :config
   (add-hook 'python-mode-hook 'jedi:setup)
   (add-to-list 'company-backends 'company-jedi))
-
-(use-package flycheck
-  :init
-  (global-flycheck-mode t))
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -202,26 +199,18 @@
 
 ;; Themes
 
-(use-package naquadah-theme
-  :defer t)
-
 (use-package color-theme-sanityinc-tomorrow
-  :init (load-theme 'sanityinc-tomorrow-eighties))
-  ;; :defer t)
-
-(use-package ample-theme
+  ;; :init (load-theme 'sanityinc-tomorrow-eighties))
   :defer t)
 
 (use-package apropospriate-theme
-  :defer t)
+  :init (load-theme 'apropospriate-dark))
+  ;; :defer t)
 
 ;; Modes
 
 (use-package yaml-mode
   :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
-
-(use-package nxml-mode
-  :mode ("\\.\\(xml\\|launch\\)$" . nxml-mode))
 
 (use-package cmake-mode
   :defer t
@@ -233,15 +222,6 @@
 
 (use-package dockerfile-mode
   :mode "Dockerfile[a-zA-Z.-]*\\'")
-
-(use-package groovy-mode
-  :defer t
-  :config
-  ;; Indent groovy code four spaces instead of two
-  (defun my-groovy-mode-hook ()
-    (setq c-basic-offset 4))
-  (add-hook 'groovy-mode-hook #'my-groovy-mode-hook)
-  :mode ("Jenkinsfile\\'" . groovy-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Functions
