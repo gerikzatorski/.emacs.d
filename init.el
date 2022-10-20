@@ -19,6 +19,7 @@
 (setq sentence-end-double-space nil)
 (setq visible-bell 1)
 (delete-selection-mode 1)
+(setq-default truncate-lines 1)
 
 ;; Keep emacs Custom-settings in separate file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -63,10 +64,6 @@
       (ansi-color-apply-on-region (point-min) (point-max))))
   (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
 
-(use-package beacon
-  :config
-  (beacon-mode 1))
-
 (use-package yasnippet
   :init
   (yas-global-mode 1))
@@ -89,10 +86,6 @@
   (ag-highlight-search t)
   (ag-reuse-buffers t))
 
-(use-package powerline
-  :config
-  (powerline-default-theme))
-
 (use-package company
   :diminish ""
   :config
@@ -109,7 +102,8 @@
   :config
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  (setq-default c-basic-offset 4))
 
 (use-package company-jedi
   :after company
@@ -197,7 +191,15 @@
   ("C-=" . er/expand-region)
   ("C--" . er/contract-region))
 
-;; Themes
+;; Themes and Visual
+
+(use-package beacon
+  :config
+  (beacon-mode 1))
+
+(use-package powerline
+  :config
+  (powerline-default-theme))
 
 (use-package color-theme-sanityinc-tomorrow
   ;; :init (load-theme 'sanityinc-tomorrow-eighties))
@@ -222,6 +224,9 @@
 
 (use-package dockerfile-mode
   :mode "Dockerfile[a-zA-Z.-]*\\'")
+
+(use-package terraform-mode
+  :mode ("\\.tf\\'" . terraform-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Functions
