@@ -263,16 +263,6 @@
   :defer t
   :mode ("\\.\\(markdown\\|mdown\\|md\\)$" . markdown-mode))
 
-(use-package groovy-mode
-  :ensure t
-  :defer t
-  :config
-  ;; Indent groovy code four spaces instead of two
-  (defun my-groovy-mode-hook ()
-    (setq c-basic-offset 4))
-  (add-hook 'groovy-mode-hook #'my-groovy-mode-hook)
-  :mode ("Jenkinsfile\\'" . groovy-mode))
-
 ;; Functions (load all files in defuns-dir)
 (setq defuns-dir (expand-file-name "defuns" user-emacs-directory))
 (dolist (file (directory-files defuns-dir t "\\w+"))
